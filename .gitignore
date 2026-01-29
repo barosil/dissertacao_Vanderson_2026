@@ -1,0 +1,78 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# Sphinx documentation
+_build/
+_static/
+_templates/
+docs/_build/
+docs/_static/
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.synctex.gz
+*.pdfsync
+*.bcf
+*.run.xml
+
+# MyST
+_build/
+.jupyter_cache/
+.myst_build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+*.bak
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Project specific
+output/
+processed_images/
+
+# Exclude from Git but include in builds (optional)
+# !_templates/
+# !_static/
+

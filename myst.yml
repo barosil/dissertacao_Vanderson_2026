@@ -1,0 +1,33 @@
+version: 1
+project:
+  title: Desenvolvimento de uma pipeline de simulação de céu em Radioastronomia Single Dish
+  subtitle: Time Ordered Data e Mapmaking
+  authors:
+    - name: Vanderson
+      affiliations:
+        - Universidade Federal de Campina Grande
+  github: https://github.com/
+  license: CC-BY-4.0
+  open_access: true
+  
+site:
+  template: book-theme
+  title: Dissertação de Mestrado
+  options:
+    logo: content/00_images/logo.png
+    favicon: content/00_images/favicon.ico
+  nav:
+    - title: Início
+      url: /
+  actions:
+    - title: Download PDF
+      url: dissertacao.pdf
+
+exports:
+  - format: pdf
+    template: plain_latex_book
+    output: dissertacao.pdf
+    
+  - format: tex
+    template: plain_latex_book
+    output: dissertacao.tex

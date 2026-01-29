@@ -1,0 +1,29 @@
+# Core Sphinx and MyST
+sphinx>=7.0
+myst-parser>=2.0
+sphinx-book-theme>=1.0
+
+# MyST-NB for notebooks (opcional)
+# myst-nb>=1.0
+
+# Sphinx extensions - essenciais
+sphinx-copybutton>=0.5
+sphinx-design>=0.5
+sphinx-multitoc-numbering>=0.1
+sphinx-proof>=0.1
+sphinxext-opengraph>=0.9
+
+# Scientific Python
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+
+# Utilities
+pyyaml>=6.0
+python-dotenv>=1.0
+
+# Quality assurance (opcional)
+# black>=23.0
+# flake8>=6.0
+# isort>=5.12
+

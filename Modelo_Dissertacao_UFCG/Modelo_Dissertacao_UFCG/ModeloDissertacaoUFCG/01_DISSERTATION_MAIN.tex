@@ -1,0 +1,227 @@
+% ###################################################################################
+%				MODELO PARA DISSERTAÇÃO DE MESTRADO EM FÍSICA UFCG
+% ###################################################################################
+
+\documentclass[
+	% -- opções da classe memoir --
+	12pt,				% tamanho da fonte
+	openright,			% capítulos começam em pág ímpar (insere página vazia caso preciso)
+	twoside,				% para impressão em recto e verso. Oposto a oneside
+	a4paper,				% tamanho do papel. 
+	english,				% idioma adicional para hifenização
+	brazil				% o último idioma é o principal do documento
+	]{abntex2}
+
+% --------------------------------------------------------------------------------------------
+%										PACOTES
+% --------------------------------------------------------------------------------------------
+\usepackage{times}
+\usepackage{lmodern}			% Usa a fonte Latin Modern			
+\usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
+\usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
+\usepackage{color}				% Controle das cores
+\usepackage{graphicx}			% Inclusão de gráficos
+\graphicspath{{Figuras/}}
+\usepackage{microtype}			% para melhorias de justificação
+\usepackage{pdfpages} 			
+\usepackage{config_capa}
+
+% --------------------------------------------------------------------------------------------
+% 								Pacotes de citações
+% --------------------------------------------------------------------------------------------
+
+\usepackage[brazilian,hyperpageref]{backref}	 % Paginas com as citações na bibl
+\usepackage[num]{abntex2cite}
+\citebrackets[]
+
+
+% Configurações do pacote backref /// Usado sem a opção anterior hyperpageref de backref 
+
+\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+
+% Texto padrão antes do número das páginas
+\renewcommand{\backref}{}
+
+% Define os textos da citação
+\renewcommand*{\backrefalt}[4]{
+	\ifcase #1 %
+		Nenhuma citação no texto.%
+	\or
+		Citado na página #2.%
+	\else
+		Citado #1 vezes nas páginas #2.%
+	\fi}%
+
+% --------------------------------------------------------------------------------------------
+%							Informações de dados para CAPA e FOLHA DE ROSTO
+% -------------------------------------------------------------------------------------------
+% 									PREÂMBULO  
+% Deve conter o tipo do trabalho, o objetivo, o nome da instituição e a área de concentração 
+% --------------------------------------------------------------------------------------------
+
+\include{02_Capa}
+
+% --------------------------------------------------------------------------------------------
+%						Configurações de aparência do PDF final
+% --------------------------------------------------------------------------------------------
+
+% Alterando o aspecto da cor azul
+\definecolor{blue}{RGB}{41,5,195}
+
+% Informações do PDF
+\makeatletter
+\hypersetup{
+     	%pagebackref=true,
+		pdftitle={\@title}, 
+		pdfauthor={\@author},
+    		pdfsubject={\imprimirpreambulo},
+	    pdfcreator={LaTeX with abnTeX2},
+		pdfkeywords={abnt}{latex}{abntex}{abntex2}{trabalho acadêmico}, 
+		colorlinks=true,       		% false: boxed links; true: colored links
+    	linkcolor=blue,          	% color of internal links
+    	citecolor=blue,        		% color of links to bibliography
+    	filecolor=magenta,      		% color of file links
+		urlcolor=blue,
+		bookmarksdepth=4
+}
+\makeatother
+
+% 							Posicionando figuras e tabelas 
+% 				no topo da página quando adicionadas sozinhas em um página em branco. 
+
+\makeatletter
+\setlength{\@fptop}{5pt} % Set distance from top of page to first float
+\makeatother
+
+% 							Espaçamentos entre linhas e parágrafos 
+% O tamanho do parágrafo é dado por:
+
+\setlength{\parindent}{1.3cm}
+
+% Controle do espaçamento entre um parágrafo e outro:
+
+\setlength{\parskip}{0.2cm}  % tente também \onelineskip
+
+% compila o indice
+\makeindex
+
+% --------------------------------------------------------------------------------------------
+% 									Início do documento
+% --------------------------------------------------------------------------------------------
+
+\begin{document}
+
+% --------------------------------------------------------------------------------------------
+% 								ELEMENTOS PRÉ-TEXTUAIS
+% --------------------------------------------------------------------------------------------
+
+\imprimircapa
+
+% Folha de rosto / o * indica que haverá a ficha bibliográfica
+
+\imprimirfolhaderosto*
+
+% 							Inserir a ficha bibliografica e folha de aprovação		
+
+\include{018_Catalog_Aprov}
+
+
+% --------------------------------------------------------------------------------------------
+%	 				Dedicatória /// Agradecimentos /// Epígrafe ///
+% --------------------------------------------------------------------------------------------
+
+\include{03_DedicatoriAgradecimentosEpigrafe}
+
+% --------------------------------------------------------------------------------------------
+%										RESUMOS
+% --------------------------------------------------------------------------------------------
+
+\include{04_ResumoAbstract}
+
+% --------------------------------------------------------------------------------------------
+% 	INSERINDO LISTAS DE FIGURAS, TABELAS, ABREVIATURAS E SIGLAS, SÍMBOLOS E SUMÁRIO
+% --------------------------------------------------------------------------------------------
+
+% inserir lista de ilustrações
+
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+\cleardoublepage
+
+% inserir lista de tabelas
+
+\pdfbookmark[0]{\listtablename}{lot}
+\listoftables*
+\cleardoublepage
+
+% inserir lista de abreviaturas e siglas \\\ inserir lista de símbolos
+
+\include{05_AbrevSiglasSimbolos}
+
+% inserir o sumario
+
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+
+% --------------------------------------------------------------------------------------------
+% 								ELEMENTOS TEXTUAIS
+% --------------------------------------------------------------------------------------------
+
+%\pagenumbering{arabic}
+\textual
+
+% --------------------------------------------------------------------------------------------
+%							Introdução, Capitulos e Conclusão
+% --------------------------------------------------------------------------------------------
+
+\include{06_Capitulo1_Introducao}
+\include{07_Capitulo2}
+\include{08_Capitulo3}
+\include{09_Capitulo4}
+\include{010_Conclusao}
+
+
+
+% --------------------------------------------------------------------------------------------
+%							Apêndices (se houver)
+% --------------------------------------------------------------------------------------------
+% Apêndices (se houver)
+
+\begin{apendicesenv}
+
+\partapendices
+
+\include{012_ApendiceA}
+\include{013_ApendiceB}
+\include{014_ApendiceC}
+
+\end{apendicesenv}
+
+% --------------------------------------------------------------------------------------------
+% 								ELEMENTOS PÓS-TEXTUAIS
+% --------------------------------------------------------------------------------------------
+
+\postextual
+
+% Referências bibliográficas
+ 
+\bibliography{011_Referencias}
+
+
+% Anexos (se houver)
+
+\begin{anexosenv}
+
+% Imprime uma página indicando o início dos anexos
+\partanexos
+ 
+\include{015_Anexo1}
+\include{016_Anexo2}
+\include{017_Anexo3}
+
+\end{anexosenv}
+
+
+\end{document}
