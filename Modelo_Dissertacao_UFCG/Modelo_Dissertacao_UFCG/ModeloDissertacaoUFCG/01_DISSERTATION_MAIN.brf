@@ -2,35 +2,35 @@
 \backcite {sasao2009_radioantennas}{{11}{(document)}{Doc-Start}}
 \backcite {burke2019introduction}{{11}{(document)}{Doc-Start}}
 \backcite {gorski2005healpix}{{11}{(document)}{Doc-Start}}
-\backcite {cheng2009telescope_Desing, burke2019introduction}{{23}{1}{listing.1}}
-\backcite {burke2019introduction,unesp_para_jovens_radioastronomia}{{23}{1}{listing.1}}
-\backcite {burke2019introduction}{{24}{1}{listing.1}}
-\backcite {burke2019introduction}{{24}{1}{listing.1}}
-\backcite {saliwanchik2021hirax,wilson2013tools}{{24}{1}{listing.1}}
-\backcite {bigotsazy2015simulations}{{24}{1}{listing.1}}
-\backcite {Zhang2023}{{24}{1}{listing.1}}
-\backcite {selvaraj2021all}{{24}{1}{listing.1}}
-\backcite {wilson2013tools,bigotsazy2015simulations}{{24}{1}{listing.1}}
-\backcite {tegmark1997mapmaking}{{25}{1}{listing.1}}
-\backcite {harper2018potential}{{25}{1}{listing.1}}
-\backcite {battye2012bingo}{{25}{1}{listing.1}}
-\backcite {ramalho2023impactos}{{25}{1}{listing.1}}
-\backcite {evans2003ddd,martin2008cleancode}{{25}{1}{listing.1}}
+\backcite {cheng2009telescope_Desing, burke2019introduction}{{23}{1}{section*.16}}
+\backcite {burke2019introduction,unesp_para_jovens_radioastronomia}{{23}{1}{section*.16}}
+\backcite {burke2019introduction}{{24}{1}{section*.16}}
+\backcite {burke2019introduction}{{24}{1}{section*.16}}
+\backcite {saliwanchik2021hirax,wilson2013tools}{{24}{1}{section*.16}}
+\backcite {bigotsazy2015simulations}{{24}{1}{section*.16}}
+\backcite {Zhang2023}{{24}{1}{section*.16}}
+\backcite {selvaraj2021all}{{24}{1}{section*.16}}
+\backcite {wilson2013tools,bigotsazy2015simulations}{{24}{1}{section*.16}}
+\backcite {tegmark1997mapmaking}{{25}{1}{section*.16}}
+\backcite {harper2018potential}{{25}{1}{section*.16}}
+\backcite {battye2012bingo}{{25}{1}{section*.16}}
+\backcite {ramalho2023impactos}{{25}{1}{section*.16}}
+\backcite {evans2003ddd,martin2008cleancode}{{25}{1}{section*.16}}
 \backcite {libretexts_radio_reflecting_telescope}{{27}{2.1}{section.2.1}}
 \backcite {selvaraj2021all}{{27}{2.1}{section.2.1}}
-\backcite {selvaraj2021all}{{27}{2.1}{section.2.1}}
-\backcite {libretexts_radio_reflecting_telescope}{{27}{2.1}{section.2.1}}
-\backcite {radioastronomia_text_intro, cheng2009telescope_Desing}{{27}{2.1}{section.2.1}}
-\backcite {cheng2009telescope_Desing}{{28}{2.1}{section.2.1}}
+\backcite {selvaraj2021all}{{27}{2.1}{section*.19}}
+\backcite {libretexts_radio_reflecting_telescope}{{27}{2.1}{section*.20}}
+\backcite {radioastronomia_text_intro, cheng2009telescope_Desing}{{27}{2.1}{section*.20}}
+\backcite {cheng2009telescope_Desing}{{28}{2.1}{section*.20}}
 \backcite {cheng2009telescope_Desing}{{28}{2.1}{equation.2.1.1}}
 \backcite {radioastronomia_text_intro}{{28}{2.1}{equation.2.1.1}}
 \backcite {cheng2009telescope_Desing}{{28}{2.1}{equation.2.1.1}}
 \backcite {ramalho2023impactos}{{28}{2.1}{equation.2.1.1}}
-\backcite {bingo}{{29}{2.2}{section.2.2}}
-\backcite {bingo, guillen2023_bingo}{{29}{2.2}{section.2.2}}
-\backcite {guillen2023_bingo}{{29}{2.2}{section.2.2}}
-\backcite {ramalho2023impactos}{{29}{2.2}{section.2.2}}
-\backcite {guillen2023_bingo, ramalho2023impactos}{{29}{2.2}{section.2.2}}
+\backcite {bingo}{{29}{2.2}{section*.21}}
+\backcite {bingo, guillen2023_bingo}{{29}{2.2}{section*.21}}
+\backcite {guillen2023_bingo}{{29}{2.2}{section*.22}}
+\backcite {ramalho2023impactos}{{29}{2.2}{section*.22}}
+\backcite {guillen2023_bingo, ramalho2023impactos}{{29}{2.2}{section*.23}}
 \backcite {guillen2023_bingo}{{29}{2.2.1}{subsection.2.2.1}}
 \backcite {marr_snell_kurtz_2015}{{30}{2.2.1}{subsection.2.2.1}}
 \backcite {guillen2023_bingo}{{30}{2.2.1}{subsection.2.2.1}}
@@ -56,7 +56,7 @@
 \backcite {chatterjee2023driftscan}{{35}{2.3.5}{subsection.2.3.5}}
 \backcite {battye2012bingo,chatterjee2023driftscan}{{35}{2.3.5}{subsection.2.3.5}}
 \backcite {li2023fastdriftscan}{{35}{2.3.5}{subsection.2.3.5}}
-\backcite {gregorio2002fundamentos}{{36}{2.4}{section.2.4}}
+\backcite {gregorio2002fundamentos}{{36}{2.4}{section*.27}}
 \backcite {burke2019introduction}{{36}{2.4}{equation.2.4.15}}
 \backcite {burke2019introduction}{{36}{1}{figure.2.1}}
 \backcite {cheng2009telescope_Desing}{{36}{2.4}{figure.2.1}}
@@ -64,7 +64,7 @@
 \backcite {sasao2009_radioantennas}{{37}{2.4}{equation.2.4.16}}
 \backcite {sasao2009_radioantennas}{{37}{2}{figure.2.2}}
 \backcite {nikolova2025noise}{{37}{2.4}{figure.2.2}}
-\backcite {harper2018potential}{{38}{2.4.1}{subsection.2.4.1}}
+\backcite {harper2018potential}{{37}{2.4.1}{subsection.2.4.1}}
 \backcite {harper2018potential}{{38}{2.4.1}{equation.2.4.19}}
 \backcite {harper2018potential}{{38}{2.4.1}{equation.2.4.20}}
 \backcite {harper2018potential}{{38}{2.4.1}{equation.2.4.21}}
@@ -73,29 +73,29 @@
 \backcite {burke2019introduction}{{39}{3}{figure.2.3}}
 \backcite {burke2019introduction}{{39}{2.5.1}{figure.2.3}}
 \backcite {burke2019introduction}{{39}{2.5.1}{figure.2.3}}
-\backcite {burke2019introduction}{{40}{2.5.1}{figure.2.3}}
+\backcite {burke2019introduction}{{39}{2.5.1}{figure.2.3}}
 \backcite {burke2019introduction, wilson2013tools}{{40}{2.5.1}{figure.2.3}}
 \backcite {thompson2017interferometry}{{40}{2.5.2}{subsection.2.5.2}}
 \backcite {Hagen2002}{{40}{2.5.2}{subsection.2.5.2}}
 \backcite {Heiles2001}{{40}{2.5.2}{subsection.2.5.2}}
 \backcite {Heiles2001, wilson2013tools}{{40}{2.5.2}{equation.2.5.25}}
 \backcite {thompson2017interferometry}{{40}{2.5.2}{equation.2.5.25}}
-\backcite {Lopez2023, Hagen2002}{{41}{2.5.2}{equation.2.5.25}}
+\backcite {Lopez2023, Hagen2002}{{40}{2.5.2}{equation.2.5.25}}
 \backcite {Hagen2002}{{41}{2.5.2}{equation.2.5.27}}
 \backcite {MarcelobjApostilaPDS}{{41}{2.5.3}{subsection.2.5.3}}
 \backcite {Pimental2022}{{41}{2.5.3.0.1}{paragraph.2.5.3.0.1}}
-\backcite {Wuensche2022}{{42}{2.5.3.0.1}{paragraph.2.5.3.0.1}}
-\backcite {MarcelobjApostilaPDS}{{42}{2.5.3.0.1}{paragraph.2.5.3.0.1}}
+\backcite {Wuensche2022}{{41}{2.5.3.0.1}{paragraph.2.5.3.0.1}}
+\backcite {MarcelobjApostilaPDS}{{42}{2.5.3.0.1}{section*.31}}
 \backcite {Souza2024}{{42}{2.5.3.0.2}{paragraph.2.5.3.0.2}}
 \backcite {Souza2024}{{42}{2.5.3.0.2}{equation.2.5.29}}
 \backcite {Holzmann2019telecomunicacao}{{42}{2.5.3.0.3}{paragraph.2.5.3.0.3}}
-\backcite {MarcelobjApostilaPDS}{{43}{2.5.3.0.3}{equation.2.5.30}}
+\backcite {MarcelobjApostilaPDS}{{42}{2.5.3.0.3}{equation.2.5.30}}
 \backcite {Vieira2020}{{43}{2.5.4}{subsection.2.5.4}}
 \backcite {burke2019introduction}{{43}{2.5.4}{subsection.2.5.4}}
 \backcite {Daniyan2011, Balanis2005}{{43}{2.5.4}{equation.2.5.31}}
 \backcite {Daniyan2011, Balanis2005}{{43}{2.5.4}{equation.2.5.32}}
 \backcite {burke2019introduction}{{43}{2.5.5}{subsection.2.5.5}}
-\backcite {Vieira2020, burke2019introduction}{{44}{2.5.5}{equation.2.5.33}}
+\backcite {Vieira2020, burke2019introduction}{{43}{2.5.5}{equation.2.5.33}}
 \backcite {burke2019introduction}{{44}{2.5.5}{equation.2.5.33}}
 \backcite {burke2019introduction}{{44}{2.5.5}{equation.2.5.33}}
 \backcite {ufrgs_21cm_line, hossain2018salsa}{{44}{2.6.1}{subsection.2.6.1}}
@@ -105,28 +105,28 @@
 \backcite {harper2018potential}{{45}{2.6.1}{equation.2.6.35}}
 \backcite {loeb2008possibility21}{{45}{2.6.1}{equation.2.6.35}}
 \backcite {pritchard2008evolution21,loeb2008possibility21}{{45}{2.6.1}{equation.2.6.36}}
-\backcite {pritchard2008evolution21}{{46}{2.6.1}{equation.2.6.36}}
+\backcite {pritchard2008evolution21}{{45}{2.6.1}{equation.2.6.36}}
 \backcite {pritchard2008evolution21}{{46}{2.6.1}{equation.2.6.36}}
 \backcite {harper2018potential}{{46}{2.6.1}{equation.2.6.36}}
-\backcite {slac_synchrotrons_explained,burke2019introduction}{{46}{2.6.1}{section*.16}}
+\backcite {slac_synchrotrons_explained,burke2019introduction}{{46}{2.6.1}{section*.34}}
 \backcite {EEL2018}{{46}{2.6.1}{equation.2.6.37}}
-\backcite {EEL2018}{{47}{2.6.1}{equation.2.6.37}}
+\backcite {EEL2018}{{46}{2.6.1}{equation.2.6.37}}
 \backcite {EEL2018}{{47}{2.6.1}{equation.2.6.38}}
 \backcite {EEL2018}{{47}{2.6.1}{equation.2.6.39}}
-\backcite {burke2019introduction, ahmed2015_phys_eng_detection}{{47}{2.6.1}{section*.17}}
-\backcite {burke2019introduction}{{47}{2.6.1}{section*.17}}
-\backcite {burke2019introduction}{{48}{2.6.1}{section*.17}}
-\backcite {burke2019introduction}{{48}{2.6.1}{section*.18}}
-\backcite {burke2019introduction, selvaraj2021all}{{48}{2.6.1}{section*.18}}
-\backcite {burke2019introduction}{{48}{2.6.1}{section*.18}}
+\backcite {burke2019introduction, ahmed2015_phys_eng_detection}{{47}{2.6.1}{section*.35}}
+\backcite {burke2019introduction}{{47}{2.6.1}{section*.35}}
+\backcite {burke2019introduction}{{47}{2.6.1}{section*.35}}
+\backcite {burke2019introduction}{{48}{2.6.1}{section*.36}}
+\backcite {burke2019introduction, selvaraj2021all}{{48}{2.6.1}{section*.36}}
+\backcite {burke2019introduction}{{48}{2.6.1}{section*.36}}
 \backcite {EEL2018}{{48}{2.6.2}{subsection.2.6.2}}
-\backcite {EEL2018}{{49}{2.6.2}{subsection.2.6.2}}
+\backcite {EEL2018}{{48}{2.6.2}{subsection.2.6.2}}
 \backcite {EEL2018}{{49}{2.6.2}{equation.2.6.40}}
 \backcite {sasao2009_radioantennas}{{49}{2.7}{section.2.7}}
-\backcite {sasao2009_radioantennas}{{50}{2.7}{equation.2.7.41}}
+\backcite {sasao2009_radioantennas}{{49}{2.7}{equation.2.7.41}}
 \backcite {Price2018}{{50}{2.7.1}{equation.2.7.43}}
 \backcite {Monakhov2021}{{50}{2.7.1}{equation.2.7.44}}
-\backcite {ramalho2023impactos}{{51}{2.7.1}{equation.2.7.44}}
+\backcite {ramalho2023impactos}{{50}{2.7.1}{equation.2.7.44}}
 \backcite {wilson2013tools}{{53}{3.1.1}{subsection.3.1.1}}
 \backcite {sasao2009_radioantennas}{{53}{3.1.1}{subsection.3.1.1}}
 \backcite {INPE2024BINGO}{{53}{3.1.1}{subsection.3.1.1}}
@@ -137,18 +137,18 @@
 \backcite {ramalho2023impactos}{{54}{3.1.2}{subsection.3.1.2}}
 \backcite {ramalho2023impactos}{{54}{3.1.2}{subsection.3.1.2}}
 \backcite {mericia2019hi}{{56}{3.2.1}{subsection.3.2.1}}
-\backcite {ferrari2002emissao}{{56}{3.2.1}{section*.20}}
-\backcite {mendes2024dig}{{56}{3.2.1}{section*.20}}
-\backcite {burke2019introduction}{{56}{3.2.1}{section*.20}}
-\backcite {marins2023bingo}{{57}{3.2.1}{section*.21}}
-\backcite {mericia2019hi}{{57}{3.2.1}{section*.21}}
-\backcite {marins2023bingo}{{57}{3.2.1}{section*.21}}
-\backcite {nicolazzi2016agn}{{57}{3.2.1}{section*.21}}
-\backcite {condon2018era_ch6}{{57}{3.2.1}{section*.21}}
-\backcite {mericia2019hi}{{57}{3.2.1}{section*.22}}
-\backcite {mericia2023bingotese}{{57}{3.2.1}{section*.22}}
-\backcite {mericia2023bingotese}{{58}{3.2.1}{section*.22}}
-\backcite {mericia2023bingotese}{{58}{3.2.1}{section*.22}}
+\backcite {ferrari2002emissao}{{56}{3.2.1}{section*.38}}
+\backcite {mendes2024dig}{{56}{3.2.1}{section*.38}}
+\backcite {burke2019introduction}{{56}{3.2.1}{section*.38}}
+\backcite {marins2023bingo}{{57}{3.2.1}{section*.39}}
+\backcite {mericia2019hi}{{57}{3.2.1}{section*.39}}
+\backcite {marins2023bingo}{{57}{3.2.1}{section*.39}}
+\backcite {nicolazzi2016agn}{{57}{3.2.1}{section*.39}}
+\backcite {condon2018era_ch6}{{57}{3.2.1}{section*.39}}
+\backcite {mericia2019hi}{{57}{3.2.1}{section*.40}}
+\backcite {mericia2023bingotese}{{57}{3.2.1}{section*.40}}
+\backcite {mericia2023bingotese}{{58}{3.2.1}{section*.40}}
+\backcite {mericia2023bingotese}{{58}{3.2.1}{section*.40}}
 \backcite {mericia2019hi}{{58}{3.2.2}{subsection.3.2.2}}
 \backcite {Pimental2022,mosquera2022eor}{{59}{3.3}{section.3.3}}
 \backcite {hao2025lna}{{59}{3.3.1}{subsection.3.3.1}}

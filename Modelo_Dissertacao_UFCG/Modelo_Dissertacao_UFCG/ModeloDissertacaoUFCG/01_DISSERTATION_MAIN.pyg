@@ -1,0 +1,27 @@
+        class GeometryProvider:
+    """
+    Interface abstrata para cálculo de geometria observacional.
+
+    Define o contrato para implementações que calculam parâmetros
+    geométricos entre um observador fixo e trajetórias de satélites.
+    """
+
+    def compute(self, tracks: Any, observer: Any) -> xr.Dataset:
+        """
+        Calcula parâmetros geométricos observacionais.
+
+        Args:
+            tracks (Any): Trajetórias dos satélites.
+            observer (Any): Observador/estação terrestre.
+
+        Returns:
+            xr.Dataset: Dataset com dimensão time e variáveis:
+                - theta(time): Ângulo entre satélite e feixe
+                - range(time): Distância satélite-observador
+                - az(time): Azimute (opcional)
+                - el(time): Elevação (opcional)
+
+        Raises:
+            NotImplementedError: Deve ser implementado por subclasses.
+        """
+        raise NotImplementedError
