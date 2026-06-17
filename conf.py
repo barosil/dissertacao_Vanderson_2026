@@ -62,6 +62,8 @@ extensions = [
     "myst_parser",
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
+    # LaTeX: minted para syntax highlighting nos blocos de código
+    "sphinx_minted_ext",
     # Design e apresentação
     "sphinx_book_theme",
     "sphinx_design",
@@ -157,6 +159,11 @@ mathjax3_config = {
 
 latex_engine = "pdflatex"
 
+# Minted: syntax highlighting com pygments no LaTeX
+# Necessário --shell-escape para o pdflatex executar o pygmentize
+minted_style = "default"
+minted_options = "fontsize=\\small,linenos,frame=lines,framesep=2mm"
+
 # Configurar idioma do documento
 language = "pt_BR"
 
@@ -189,6 +196,9 @@ latex_elements = {
         
         % Configuração da capa UFCG
         \usepackage{config_capa}
+        
+        % Minted: syntax highlighting com Pygments no LaTeX
+        \usepackage[fontsize=\small,linenos,frame=lines,framesep=2mm]{minted}
         
         % Metadados da dissertação
         \titulo{Pipeline de Simulação de Céu em Radioastronomia Single Dish}
@@ -234,6 +244,10 @@ latex_elements = {
         \tableofcontents*
         \cleardoublepage
     """,
+    # latexmk: necessário --shell-escape para o minted executar pygmentize
+    "latexmk": r"""
+pdflatex = pdflatex -shell-escape $ENV{'LATEXOPTS'} %O %S
+""",
 }
 
 # Documentos LaTeX para gerar

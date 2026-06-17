@@ -4,7 +4,43 @@
 %
 \chapter{Introdução}
 
-A radioastronomia é um campo fundamental da astronomia observacional que estuda o universo através da detecção de ondas de rádio emitidas por objetos celestes. Podemos considerar a que a radioastronomia nasceu no ano de 1928, quando o físico  e engenheiro Karl Jansky desenvolveu um das primeiras antena direcional dedicada à investigação de ruídos de rádio atmosféricos. Esse instrumento veio a ser  conhecido como o primeiro radiotelescópios. Pouco tempo depois, no ano de 1932 Jansky registrou pela primeira vez emissões de ondas de radio provenientes da Via Láctea, descoberta que marcou oficialmente o início da radioastronomia \cite{cheng2009telescope_Desing, burke2019introduction}.
+\todo{O corpo do texto tem vários errinhos de linguagem, garanta um corretor ortográfico e gramatical na versão final}
+
+\begin{listing}[!h]
+    \begin{minted}[linenos, autogobble, fontsize=\footnotesize, frame=lines]{python}
+        class GeometryProvider:
+    """
+    Interface abstrata para cálculo de geometria observacional.
+
+    Define o contrato para implementações que calculam parâmetros
+    geométricos entre um observador fixo e trajetórias de satélites.
+    """
+
+    def compute(self, tracks: Any, observer: Any) -> xr.Dataset:
+        """
+        Calcula parâmetros geométricos observacionais.
+
+        Args:
+            tracks (Any): Trajetórias dos satélites.
+            observer (Any): Observador/estação terrestre.
+
+        Returns:
+            xr.Dataset: Dataset com dimensão time e variáveis:
+                - theta(time): Ângulo entre satélite e feixe
+                - range(time): Distância satélite-observador
+                - az(time): Azimute (opcional)
+                - el(time): Elevação (opcional)
+
+        Raises:
+            NotImplementedError: Deve ser implementado por subclasses.
+        """
+        raise NotImplementedError
+    \end{minted}
+    \label{code-01}
+    \caption{Exemplo do uso do minted para código no latex.}
+\end{listing}
+
+A radioastronomia é um campo fundamental da astronomia observacional que estuda o universo \replaced{por meio}{através} da detecção de ondas de rádio emitidas por objetos celestes. Podemos considerar a que a radioastronomia nasceu no ano de 1928, quando o físico  e engenheiro Karl Jansky desenvolveu um das primeiras antena direcional dedicada à investigação de ruídos de rádio atmosféricos. Esse instrumento veio a ser  conhecido como o primeiro radiotelescópios. Pouco tempo depois, no ano de 1932 Jansky registrou pela primeira vez emissões de ondas de radio provenientes da Via Láctea, descoberta que marcou oficialmente o início da radioastronomia \cite{cheng2009telescope_Desing, burke2019introduction}.
 
 
 Inspirado por esses resultados, o engenheiro  norte-americano Grote Reber construiu o primeiro radiotelescópio parabólico do mundo instalado em seu quintal. Seu projeto foi o precursor dos  radiotelescópio atuais, que continuam sendo o tipo mais comum utilizados hoje \cite{burke2019introduction,unesp_para_jovens_radioastronomia}.
@@ -45,4 +81,4 @@ Para atingir esse objetivo, foram definidos os seguintes objetivos específicos:
 
 Para atingir os objetivos propostos, este trabalho combina uma revisão dos conceitos fundamentais de radioastronomia \textit{Single Dish} com o desenvolvimento de uma pipeline de simulação orientada à representação das principais etapas do processo observacional. A abordagem adotada engloba a modelagem do céu observado, a incorporação de efeitos instrumentais, a geração de \textit{Time Ordered Data} sintéticos e a reconstrução de mapas do céu. A validação dos componentes implementados é realizada por meio de testes controlados, permitindo avaliar a coerência física e computacional da pipeline. Como resultado, busca-se disponibilizar uma estrutura modular e extensível que possa servir de base para estudos futuros relacionados à simulação de observações radioastronômicas, ao desenvolvimento de metodologias de processamento de dados e ao suporte de atividades associadas ao projeto BINGO.
 
-Esta dissertação está organizada da seguinte forma
+Esta dissertação está organizada da seguinte forma \todo{??}

@@ -1,0 +1,29 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+    \PYG{k}{class}\PYG{+w}{ }\PYG{n+nc}{GeometryProvider}\PYG{p}{:}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{Interface abstrata para cálculo de geometria observacional.}
+
+\PYG{l+s+sd}{Define o contrato para implementações que calculam parâmetros}
+\PYG{l+s+sd}{geométricos entre um observador fixo e trajetórias de satélites.}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{compute}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{tracks}\PYG{p}{:} \PYG{n}{Any}\PYG{p}{,} \PYG{n}{observer}\PYG{p}{:} \PYG{n}{Any}\PYG{p}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{xr}\PYG{o}{.}\PYG{n}{Dataset}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Calcula parâmetros geométricos observacionais.}
+
+\PYG{l+s+sd}{    Args:}
+\PYG{l+s+sd}{        tracks (Any): Trajetórias dos satélites.}
+\PYG{l+s+sd}{        observer (Any): Observador/estação terrestre.}
+
+\PYG{l+s+sd}{    Returns:}
+\PYG{l+s+sd}{        xr.Dataset: Dataset com dimensão time e variáveis:}
+\PYG{l+s+sd}{            \PYGZhy{} theta(time): Ângulo entre satélite e feixe}
+\PYG{l+s+sd}{            \PYGZhy{} range(time): Distância satélite\PYGZhy{}observador}
+\PYG{l+s+sd}{            \PYGZhy{} az(time): Azimute (opcional)}
+\PYG{l+s+sd}{            \PYGZhy{} el(time): Elevação (opcional)}
+
+\PYG{l+s+sd}{    Raises:}
+\PYG{l+s+sd}{        NotImplementedError: Deve ser implementado por subclasses.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+    \PYG{k}{raise} \PYG{n+ne}{NotImplementedError}
+\end{Verbatim}
