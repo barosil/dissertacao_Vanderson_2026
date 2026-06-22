@@ -14,11 +14,11 @@ Este capítulo apresenta uma visão sistêmica do processo de observação radio
 
 O radiotelescópio pode ser compreendido como um sistema complexo composto por subsistemas interdependentes, responsáveis por transformar a radiação eletromagnética proveniente do céu em dados digitais analisáveis. Essa abordagem sistêmica é fundamental tanto para a interpretação das observações quanto para a construção de simulações realistas.
 
-De forma geral, o fluxo de aquisição de dados inicia-se com o céu astrofísico, que constitui a fonte de radiação incidente \cite{wilson2013tools}. Essa radiação é coletada por uma antena, tipicamente do tipo parabólico em sistemas \textit{single dish}, cuja geometria permite a focalização eficiente das ondas eletromagnéticas \cite{sasao2009_radioantennas}. No foco da antena, encontram-se os \textit{horn feeds}, responsáveis por acoplar o campo eletromagnético incidente ao sistema receptor, induzindo sinais elétricos.
+De forma geral, o fluxo de aquisição de dados inicia-se com o céu astrofísico, que constitui a fonte de radiação incidente \cite{wilson2013tools}. Essa radiação é coletada por uma antena, tipicamente do tipo parabólico em sistemas \textit{single dish}, cuja geometria permite a focalização eficiente das ondas eletromagnéticas \cite{sasao2009_radioantennas}. No foco da antena, encontram-se os \textit{horn feeds}, responsáveis por acoplar o campo eletromagnético incidente ao sistema receptor, induzindo sinais elétricos. \todo[inline]{A radiação é coletada por um sistema ótico, composto por um ou dois espelhos, produzindo um feixe único que incide sobre o plano focal onde um ou mais \emph{feeds} recebem o sinal e o direcional para o receptor.}
 
 O sinal captado é então encaminhado ao frontend, onde ocorre a amplificação inicial por meio de amplificadores de baixo ruído (Low Noise Amplifiers – LNA) \cite{INPE2024BINGO}. Nessa etapa, estabelece-se o nível de ruído instrumental adicionado ao sinal, impactando diretamente a sensibilidade do sistema.
 
-Em seguida, o sinal passa por estágios de conversão de frequência e condicionamento, sendo posteriormente processado no backend, onde técnicas de processamento digital são aplicadas para filtragem, detecção e formatação dos dados.
+Em seguida, o sinal passa por estágios de conversão de frequência e condicionamento, sendo posteriormente processado no backend, onde técnicas de processamento digital são aplicadas para filtragem, detecção e formatação dos dados.\todo{remova este parágrafo, a conversão de frequência acontece em alguns radiotelescópios mas é cada vez mais rara.}
 
 O sistema de aquisição de dados (DAQ) é responsável pela interface entre o backend e o armazenamento, garantindo sincronização temporal, integridade dos dados e organização em estruturas adequadas, como os \textit{time-ordered data} (TOD) \cite{INPE2024BINGO}. Por fim, os dados são armazenados para análises posteriores.
 
@@ -153,9 +153,12 @@ O desempenho de um LNA é caracterizado por parâmetros fundamentais \cite{schwe
 
 A combinação desses parâmetros determina a eficiência do frontend em preservar a informação contida no sinal astrofísico, influenciando diretamente a sensibilidade e a qualidade dos dados observacionais.
 
+\todo{Adapte o texto em LNAs.md aqui, defina Noise Figure e mostre o ganho e NF de dois LNAs em cascata}
+
+
 \subsection{Temperatura de Sistema}
 
-A temperatura de sistema ($T_{\mathrm{sys}}$) é uma grandeza fundamental em radioastronomia, pois representa a contribuição total de ruído presente na medição \cite{mericia2019hi}. Essa quantidade pode ser expressa como a soma de diferentes componentes:
+A temperatura de sistema ($T_{\mathrm{sys}}$) é uma grandeza fundamental em radioastronomia, pois representa a contribuição total de ruído presente na medição \cite{mericia2019hi}. Essa quantidade pode ser expressa como a soma de diferentes componentes: \todo{use as definições em t_sys.md}
 
 
 \begin{equation} 
@@ -225,6 +228,7 @@ Após as etapas de recepção, amplificação e processamento digital, os sinais
 O TOD representa a forma mais próxima dos dados observacionais brutos após a digitalização e integração temporal, preservando simultaneamente informações instrumentais, temporais e de apontamento.
 
 \subsection{time-ordered data (TOD)}
+\todo{Sobre TOD, Mapas e Pixelização, unifique as ideias e incorpore o material que está em map.md}
 
 O \textit{Time Ordered Data} corresponde a uma sequência temporal de medições adquiridas continuamente ao longo da observação \cite{mericia2019hi}
 
@@ -576,7 +580,7 @@ Essas efemérides são frequentemente integradas ao sistema de controle do radio
 Em conjunto, sensores ambientais, dados de \textit{housekeeping} e efemérides constituem uma camada complementar ao fluxo principal de aquisição, fornecendo informações essenciais para validação observacional, modelagem instrumental e interpretação científica dos dados obtidos.
 
 \section{Modelagem de Ruídos}
-
+\todo{veja /notebooks/work/ruidos.ipynb}
 O sinal captado por um radiotelescópio representa uma combinação entre emissão astrofísica,  ruído instrumental e contribuições indesejadas introduzidas durante o processo de observação \cite{mericia2019hi}. Essas contribuições se somadam ao sinal de interesse impactando a sensibilidade e a qualidade dos produtos científicos derivados, como séries temporais observacionais e mapas do céu.
 
 De forma geral, os efeitos que degradam os dados podem ser classificados em duas categorias principais: ruídos aleatórios, que correspondem a flutuações estocásticas associadas a processos físicos e eletrônicos; e efeitos sistemáticos, que se manifestam como assinaturas não aleatórias introduzidas por imperfeições instrumentais, condições ambientais ou estratégias observacionais.
