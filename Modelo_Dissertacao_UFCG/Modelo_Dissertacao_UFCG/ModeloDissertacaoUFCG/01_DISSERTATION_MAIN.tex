@@ -26,7 +26,10 @@
 \usepackage{microtype}			% para melhorias de justificação
 \usepackage{pdfpages} 			
 \usepackage{config_capa}
-
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
 % --------------------------------------------------------------------------------------------
 % 								Pacotes de citações
 % --------------------------------------------------------------------------------------------
@@ -60,7 +63,7 @@
 % Deve conter o tipo do trabalho, o objetivo, o nome da instituição e a área de concentração 
 % --------------------------------------------------------------------------------------------
 
-\include{02_Capa}
+\input{02_Capa}
 
 % --------------------------------------------------------------------------------------------
 %						Configurações de aparência do PDF final
@@ -124,7 +127,7 @@
 
 % 							Inserir a ficha bibliografica e folha de aprovação		
 
-\include{018_Catalog_Aprov}
+\include{019_Catalog_Aprov}
 
 
 % --------------------------------------------------------------------------------------------
@@ -180,7 +183,9 @@
 \include{07_Capitulo2}
 \include{08_Capitulo3}
 \include{09_Capitulo4}
-\include{010_Conclusao}
+\include{010_Capitulo5}
+
+\include{011_Conclusao}
 
 
 
@@ -193,9 +198,9 @@
 
 \partapendices
 
-\include{012_ApendiceA}
-\include{013_ApendiceB}
-\include{014_ApendiceC}
+\include{013_ApendiceA}
+\include{014_ApendiceB}
+\include{015_ApendiceC}
 
 \end{apendicesenv}
 
@@ -207,7 +212,7 @@
 
 % Referências bibliográficas
  
-\bibliography{011_Referencias}
+\bibliography{012_Referencias}
 
 
 % Anexos (se houver)
@@ -217,9 +222,9 @@
 % Imprime uma página indicando o início dos anexos
 \partanexos
  
-\include{015_Anexo1}
-\include{016_Anexo2}
-\include{017_Anexo3}
+\include{016_Anexo1}
+\include{017_Anexo2}
+\include{018_Anexo3}
 
 \end{anexosenv}
 

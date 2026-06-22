@@ -1,0 +1,58 @@
+% --------------------------------------------------------------------------------------------
+% 										Capitulo 3
+% --------------------------------------------------------------------------------------------
+
+\chapter{Uma Visão Integrada de Observações e Simulações
+}
+Este capítulo apresenta uma visão sistêmica do processo de observação radioastronômica e sua representação em simulações. Estabelecemos um framework conceitual que conecta elementos físicos, instrumentais e computacionais.
+% --------------------------------------------------------------------------------------------
+% 										Se houver seção
+% --------------------------------------------------------------------------------------------
+\section{O Radiotelescópio como Sistema}
+
+\subsection{Componentes Físicos}
+
+O radiotelescópio pode ser compreendido como um sistema complexo composto por subsistemas interdependentes, responsáveis por transformar a radiação eletromagnética proveniente do céu em dados digitais analisáveis. Essa abordagem sistêmica é fundamental tanto para a interpretação das observações quanto para a construção de simulações realistas.
+
+De forma geral, o fluxo de aquisição de dados inicia-se com o céu astrofísico, que constitui a fonte de radiação incidente \cite{wilson2013tools}. Essa radiação é coletada por uma antena, tipicamente do tipo parabólico em sistemas \textit{single dish}, cuja geometria permite a focalização eficiente das ondas eletromagnéticas \cite{sasao2009_radioantennas}. No foco da antena, encontram-se os \textit{horn feeds}, responsáveis por acoplar o campo eletromagnético incidente ao sistema receptor, induzindo sinais elétricos.
+
+O sinal captado é então encaminhado ao frontend, onde ocorre a amplificação inicial por meio de amplificadores de baixo ruído (Low Noise Amplifiers – LNA) \cite{INPE2024BINGO}. Nessa etapa, estabelece-se o nível de ruído instrumental adicionado ao sinal, impactando diretamente a sensibilidade do sistema.
+
+Em seguida, o sinal passa por estágios de conversão de frequência e condicionamento, sendo posteriormente processado no backend, onde técnicas de processamento digital são aplicadas para filtragem, detecção e formatação dos dados.
+
+O sistema de aquisição de dados (DAQ) é responsável pela interface entre o backend e o armazenamento, garantindo sincronização temporal, integridade dos dados e organização em estruturas adequadas, como os \textit{time-ordered data} (TOD) \cite{INPE2024BINGO}. Por fim, os dados são armazenados para análises posteriores.
+
+Paralelamente à cadeia principal de sinal, existe um sistema de controle responsável por gerenciar o apontamento da antena, a configuração dos receptores e a operação geral do instrumento. Esse sistema recebe informações de sensores diversos, incluindo temperatura, posição e estado eletrônico, permitindo o monitoramento contínuo e a calibração do sistema.
+
+Essa estrutura pode ser representada esquematicamente como um fluxo hierárquico e controlado, no qual tanto a cadeia de sinal quanto os mecanismos de controle desempenham papéis essenciais na qualidade final dos dados observacionais, conforme ilustrado na Figura \ref{fig:fluxo_hierárquico}.
+
+
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=.25]{Figuras/mermaid-diagram.png}
+\caption{Arquitetura funcional de um radiotelescópio single dish, destacando a cadeia de aquisição de dados (céu → antena → frontend → backend → DAQ → armazenamento) e os subsistemas de controle e monitoramento ambiental.}. Fonte: Elaboração própria.
+\label{fig:fluxo_hierárquico}
+\end{figure}
+
+\subsection{Cadeia de Sinal}
+
+A cadeia de sinal em um radiotelescópio descreve o processo físico e eletrônico pelo qual a radiação eletromagnética incidente é convertida em dados digitais. Essa cadeia pode ser decomposta em etapas sequenciais, cada uma introduzindo transformações específicas no sinal:
+
+\begin{itemize}
+    \item \textbf{Radiação incidente:} O processo inicia-se com a chegada de fótons provenientes de fontes astrofísicas, caracterizados por sua intensidade, frequência e distribuição angular no céu.
+
+    \item \textbf{Coleta do sinal:} A antena realiza a coleta da radiação eletromagnética e sua focalização, enquanto os \textit{horn feeds} efetuam o acoplamento do sinal ao sistema receptor, definindo o padrão de sensibilidade angular do instrumento (feixe) \cite{Souza2024}.
+
+    \item \textbf{Amplificação (Frontend):} O sinal é amplificado por amplificadores de baixo ruído (LNA), minimizando a degradação da razão sinal-ruído e aumentando a sensibilidade do sistema \cite{ramalho2023impactos}.
+
+    \item \textbf{Conversão de frequência:} O sinal é transladado para frequências intermediárias por meio de misturadores e osciladores locais (\textit{downconversion}), facilitando o processamento eletrônico subsequente \cite{Azevedo2018}.
+
+    \item \textbf{Digitalização:} Conversores analógico-digitais (ADCs) transformam o sinal contínuo em uma sequência discreta no tempo, representando-o no domínio digital dentro das limitações impostas pela taxa de amostragem e pela quantização \cite{ramalho2023impactos}.
+
+    \item \textbf{Processamento digital:} No backend, o sinal digital é submetido a técnicas de filtragem, integração temporal e análise espectral, permitindo a caracterização do sinal em termos de intensidade e conteúdo espectral das fontes astronômicas observadas \cite{ramalho2023impactos}.
+
+    \item \textbf{Armazenamento:} Os dados processados são organizados em estruturas como \textit{time-ordered data} (TOD), contendo informações de intensidade associadas ao tempo, que servirão como entrada para etapas posteriores, como o \textit{map-making}.
+\end{itemize}
+
+

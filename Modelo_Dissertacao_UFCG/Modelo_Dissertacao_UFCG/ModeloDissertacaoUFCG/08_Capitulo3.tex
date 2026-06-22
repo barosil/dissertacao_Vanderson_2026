@@ -1,21 +1,872 @@
-% --------------------------------------------------------------------------------------------
-% 										Capitulo 3
-% --------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
+% Capítulo 3
+% ------------------------------------------------------------------------------
+\chapter{Uma Visão Integrada de Observações e Simulações}
 
-\chapter{Técnicas Experimentais}
+Este capítulo apresenta uma visão sistêmica do processo de observação radioastronômica e sua representação em simulações. Estabelecemos um framework conceitual que conecta elementos físicos, instrumentais e computacionais.
 
-% --------------------------------------------------------------------------------------------
-% 										Se houver seção
-% --------------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
+% Se houver seção
+% ------------------------------------------------------------------------------
+\section{O Radiotelescópio como Sistema}
 
-\section{Nome da seção}
+\subsection{Componentes Físicos}
 
-% --------------------------------------------------------------------------------------------
-% 										Se houver subseção
-% --------------------------------------------------------------------------------------------
+O radiotelescópio pode ser compreendido como um sistema complexo composto por subsistemas interdependentes, responsáveis por transformar a radiação eletromagnética proveniente do céu em dados digitais analisáveis. Essa abordagem sistêmica é fundamental tanto para a interpretação das observações quanto para a construção de simulações realistas.
+
+De forma geral, o fluxo de aquisição de dados inicia-se com o céu astrofísico, que constitui a fonte de radiação incidente \cite{wilson2013tools}. Essa radiação é coletada por uma antena, tipicamente do tipo parabólico em sistemas \textit{single dish}, cuja geometria permite a focalização eficiente das ondas eletromagnéticas \cite{sasao2009_radioantennas}. No foco da antena, encontram-se os \textit{horn feeds}, responsáveis por acoplar o campo eletromagnético incidente ao sistema receptor, induzindo sinais elétricos.
+
+O sinal captado é então encaminhado ao frontend, onde ocorre a amplificação inicial por meio de amplificadores de baixo ruído (Low Noise Amplifiers – LNA) \cite{INPE2024BINGO}. Nessa etapa, estabelece-se o nível de ruído instrumental adicionado ao sinal, impactando diretamente a sensibilidade do sistema.
+
+Em seguida, o sinal passa por estágios de conversão de frequência e condicionamento, sendo posteriormente processado no backend, onde técnicas de processamento digital são aplicadas para filtragem, detecção e formatação dos dados.
+
+O sistema de aquisição de dados (DAQ) é responsável pela interface entre o backend e o armazenamento, garantindo sincronização temporal, integridade dos dados e organização em estruturas adequadas, como os \textit{time-ordered data} (TOD) \cite{INPE2024BINGO}. Por fim, os dados são armazenados para análises posteriores.
+
+Paralelamente à cadeia principal de sinal, existe um sistema de controle responsável por gerenciar o apontamento da antena, a configuração dos receptores e a operação geral do instrumento. Esse sistema recebe informações de sensores diversos, incluindo temperatura, posição e estado eletrônico, permitindo o monitoramento contínuo e a calibração do sistema.
+
+Essa estrutura pode ser representada esquematicamente como um fluxo hierárquico e controlado, no qual tanto a cadeia de sinal quanto os mecanismos de controle desempenham papéis essenciais na qualidade final dos dados observacionais, conforme ilustrado na Figura \ref{fig:fluxo_hierárquico}.
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=.25]{Figuras/mermaid-diagram.png}
+\caption{Arquitetura funcional de um radiotelescópio single dish, destacando a cadeia de aquisição de dados (céu → antena → frontend → backend → DAQ → armazenamento) e os subsistemas de controle e monitoramento ambiental. Fonte: Elaboração própria.}
+\label{fig:fluxo_hierárquico}
+\end{figure}
+
+\subsection{Cadeia de Sinal}
+
+A cadeia de sinal em um radiotelescópio descreve o processo físico e eletrônico pelo qual a radiação eletromagnética incidente é convertida em dados digitais. Essa cadeia pode ser decomposta em etapas sequenciais, cada uma introduzindo transformações específicas no sinal:
+
+\begin{itemize}
+    \item \textbf{Radiação incidente:} O processo inicia-se com a chegada de fótons provenientes de fontes astrofísicas, caracterizados por sua intensidade, frequência e distribuição angular no céu.
+    \item \textbf{Coleta do sinal:} A antena realiza a coleta da radiação eletromagnética e sua focalização, enquanto os \textit{horn feeds} efetuam o acoplamento do sinal ao sistema receptor, definindo o padrão de sensibilidade angular do instrumento (feixe) \cite{Souza2024}.
+    \item \textbf{Amplificação (Frontend):} O sinal é amplificado por amplificadores de baixo ruído (LNA), minimizando a degradação da razão sinal-ruído e aumentando a sensibilidade do sistema \cite{ramalho2023impactos}.
+    \item \textbf{Conversão de frequência:} O sinal é transladado para frequências intermediárias por meio de misturadores e osciladores locais (\textit{downconversion}), facilitando o processamento eletrônico subsequente \cite{Azevedo2018}.
+    \item \textbf{Digitalização:} Conversores analógico-digitais (ADCs) transformam o sinal contínuo em uma sequência discreta no tempo, representando-o no domínio digital dentro das limitações impostas pela taxa de amostragem e pela quantização \cite{ramalho2023impactos}.
+    \item \textbf{Processamento digital:} No backend, o sinal digital é submetido a técnicas de filtragem, integração temporal e análise espectral, permitindo a caracterização do sinal em termos de intensidade e conteúdo espectral das fontes astronômicas observadas \cite{ramalho2023impactos}.
+    \item \textbf{Armazenamento:} Os dados processados são organizados em estruturas como \textit{time-ordered data} (TOD), contendo informações de intensidade associadas ao tempo, que servirão como entrada para etapas posteriores, como o \textit{map-making}. \end{itemize}
+%-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    \section{Céu Astrofísico}
+
+\subsection{Componentes do Céu em Rádio}
+
+A radiação captada por um radiotelescópio é composta por uma superposição de contribuições galácticas e extragalácticas, que variam em escala angular, frequência e intensidade \cite{mericia2019hi}. Esses componentes não são observados isoladamente, mas combinados no sinal medido, sendo sua compreensão fundamental tanto para a interpretação dos dados quanto para a construção de simulações realistas.
+
+De forma geral, o céu em rádio pode ser decomposto em três categorias principais: emissão difusa, fontes discretas e foregrounds.
+
+\subsubsection*{Emissão Difusa}
+
+A emissão difusa corresponde a componentes do céu cuja distribuição espacial é contínua, apresentando variações suaves em escalas angulares maiores que a resolução típica do instrumento. Do ponto de vista observacional, essa emissão pode ser descrita por um campo contínuo de temperatura de brilho $T(\hat{n})$, sendo modulada pela resposta angular (feixe) do radiotelescópio.
+
+Fisicamente, a emissão difusa resulta da superposição de diversos processos astrofísicos que ocorrem em larga escala, tanto no meio galáctico quanto extragaláctico. Dentre as principais contribuições, destacam-se:
+
+\begin{itemize}
+    \item \textbf{Emissão Galáctica:} Principal componente difuso em rádio, dominado por radiação síncrotron produzida por elétrons relativísticos em campos magnéticos, além de contribuições de emissão livre-livre (bremsstrahlung) e emissão térmica de poeira \cite{ferrari2002emissao}. Esse componente apresenta forte estrutura em larga escala angular e dependência espectral suave.
+
+    \item \textbf{Meio intergaláctico:} Contribuição proveniente do gás difuso que permeia o espaço entre galáxias, composto por hidrogênio em diferentes estados físicos. Em particular, a emissão associada ao hidrogênio neutro na linha de 21 cm é relevante em estudos cosmológicos de mapeamento de intensidade \cite{mendes2024dig}.
+
+    \item \textbf{Radiação Cósmica de Fundo em Micro-ondas (CMB):} Componente quase isotrópica que permeia todo o céu, resultante da radiação remanescente do Big Bang. Apresenta pequenas anisotropias que contêm informações sobre a estrutura em larga escala do universo \cite{burke2019introduction}.
+\end{itemize}
+
+Do ponto de vista da análise de dados, a emissão difusa pode constituir tanto o sinal de interesse quanto um componente contaminante. Em experimentos de mapeamento de intensidade, a separação entre emissão galáctica difusa e o sinal cosmológico representa um dos principais desafios.
+
+\subsubsection*{Fontes Discretas}
+
+As fontes discretas correspondem a objetos astrofísicos compactos cuja emissão está concentrada em escalas angulares menores que a resolução do instrumento. Nessas condições, podem ser modeladas como fontes pontuais, frequentemente representadas por funções delta convoluídas com o feixe instrumental.
+
+Do ponto de vista físico, a emissão dessas fontes é predominantemente não térmica, sendo dominada por processos como radiação síncrotron, embora contribuições térmicas possam ocorrer dependendo do tipo de objeto. Em levantamentos em rádio, a população de fontes discretas é majoritariamente extragaláctica, incluindo galáxias com formação estelar e núcleos galácticos ativos \cite{marins2023bingo}.
+
+A presença de fontes discretas pode impactar significativamente as observações, introduzindo sinais pontuais de alto brilho que contaminam mapas difusos. Por essa razão, sua identificação, modelagem e eventual subtração constituem etapas essenciais no processamento de dados, especialmente em estudos de mapeamento de intensidade \cite{mericia2019hi}.
+
+As principais categorias incluem:
+
+\begin{itemize}
+    \item \textbf{Galáxias individuais:} Galáxias com formação estelar ativa ou núcleos galácticos ativos (AGN) emitem radiação significativa em rádio, contribuindo como fontes pontuais \cite{marins2023bingo}.
+
+    \item \textbf{Quasares:} Núcleos galácticos extremamente luminosos, com emissão predominantemente não térmica associada a jatos relativísticos \cite{nicolazzi2016agn}.
+
+    \item \textbf{Pulsares:} Estrelas de nêutrons altamente magnetizadas que emitem radiação na forma de pulsos periódicos, apresentando forte dependência temporal \cite{condon2018era_ch6}.
+\end{itemize}
+
+\subsubsection*{Foregrounds}
+
+Os \textit{foregrounds} correspondem a componentes astrofísicos que, embora não constituam o sinal cosmológico de interesse, dominam o sinal observado em rádio. Em muitos experimentos, especialmente aqueles voltados ao mapeamento de intensidade do hidrogênio neutro, a amplitude dos foregrounds pode exceder o sinal cosmológico em várias ordens de magnitude, tornando sua modelagem e remoção um dos principais desafios da análise de dados \cite{mericia2019hi}.
+
+A separação entre foregrounds e sinal cosmológico baseia-se, em grande parte, nas diferenças em suas propriedades espectrais e espaciais, sendo frequentemente explorada por técnicas de decomposição espectral e métodos estatísticos \cite{mericia2023bingotese}.
+
+Entre os principais componentes destacam-se:
+
+\begin{itemize}
+    \item \textbf{Emissão Galáctica:} Dominada por radiação síncrotron, além de contribuições de emissão livre-livre e poeira térmica. Apresenta forte variação espacial e dependência espectral suave, frequentemente modelada por leis de potência \cite{mericia2023bingotese}.
+
+    \item \textbf{Fontes extragalácticas brilhantes:} Incluem núcleos galácticos ativos e radiogaláxias de alta luminosidade, que podem introduzir contaminação significativa em mapas difusos, exigindo estratégias de mascaramento ou subtração \cite{mericia2023bingotese}.
+\end{itemize}
+
+O sinal observado pode, portanto, ser interpretado como a superposição de componentes com diferentes assinaturas espectrais e espaciais, motivando o uso de técnicas avançadas de separação de componentes para a extração do sinal cosmológico.
+
+\subsection{Modelagem do Céu}
+
+A modelagem do céu em radioastronomia consiste na descrição matemática do campo de temperatura de brilho resultante da superposição dos diferentes componentes astrofísicos. Esse modelo constitui a base para a interpretação dos dados observacionais e para a construção de simulações realistas.
+
+De forma geral, a temperatura de brilho do céu pode ser expressa como \cite{mericia2019hi}:
+
+\begin{equation}
+T_{\mathrm{sky}}(\nu, \hat{n}) =
+T_{\mathrm{signal}}(\nu, \hat{n}) +
+T_{\mathrm{foreground}}(\nu, \hat{n}) +
+T_{\mathrm{CMB}}(\hat{n})
+\end{equation}
+
+onde $\nu$ representa a frequência de observação e $\hat{n}$ a direção no céu.
+
+Essa decomposição representa uma descrição idealizada do céu, anterior aos efeitos instrumentais. Na prática, o sinal observado é modificado pela resposta do instrumento, incluindo a convolução com o feixe e a presença de ruído instrumental.
+
+O termo $T_{\mathrm{signal}}$ representa o sinal de interesse científico, como a emissão de hidrogênio neutro em estudos de mapeamento de intensidade. O termo $T_{\mathrm{foreground}}$ engloba as contribuições dominantes de emissão galáctica e extragaláctica. Já o termo $T_{\mathrm{CMB}}$ corresponde à radiação cósmica de fundo, aproximadamente isotrópica com pequenas anisotropias.
+
+A modelagem do céu é, portanto, um elemento central no desenvolvimento de pipelines de simulação e análise, permitindo a geração de cenários realistas e a validação de métodos de separação de componentes.
 
 
-\subsection{Nome da Subseção}
+\section{Frontend e Amplificação}
+
+O frontend de um radiotelescópio corresponde ao conjunto de componentes responsáveis pela recepção inicial e amplificação do sinal proveniente da antena \cite{Pimental2022,mosquera2022eor}. Essa etapa é crucial para a definição da sensibilidade do sistema, uma vez que o ruído introduzido nessa fase impacta diretamente a qualidade dos dados observacionais
+
+Devido à baixa intensidade dos sinais astrofísicos em rádio, a amplificação deve ser realizada com o menor acréscimo possível de ruído. Nesse contexto, os amplificadores de baixo ruído (\textit{Low Noise Amplifiers} – LNA) desempenham papel central no desempenho do sistema.
+
+\subsection{Low Noise Amplifier (LNA)}
+
+O \textit{Low Noise Amplifier} (LNA) é um dispositivo eletrônico projetado para amplificar sinais fracos com a menor adição possível de ruído ao sinal \cite{hao2025lna}. A escolha do LNA é fundamental para a sensibilidade do radiotelescópio, uma vez que o ruído introduzido nesse estágio inicial é amplificado ao longo de toda a cadeia de recepção, dominando a contribuição dos estágios subsequentes.
+
+No contexto astrofísico, os LNAs possibilitam uma melhoria na sensibilidade do sistema, pois permitem a amplificação de sinais fracos captados pela antena, melhorando a razão sinal-ruído (SNR) e aumentando o alcance das observações. Isso contribui para a redução da temperatura de ruído do sistema, permitindo aos astrônomos captar sinais de rádio com maior precisão e nível de detalhe \cite{hao2025lna}.
+
+O desempenho de um LNA é caracterizado por parâmetros fundamentais \cite{schweber2013lna,hao2025lna}, dentre os quais destacam-se :
+
+\begin{itemize}
+    \item \textbf{Ganho ($G$):} Medido em decibéis (dB), representa a amplificação do sinal, sendo definido como a razão entre a potência de saída e a potência de entrada. Valores elevados de ganho  são desejáveis para garantir que o ruído introduzido pelos estágios subsequentes seja desprezível em relação ao ruído do primeiro estágio \cite{schweber2013lna}.
+
+    \item \textbf{Temperatura de ruído ($T_N$):} Quantifica o ruído introduzido pelo amplificador, sendo expressa em Kelvin. LNAs de alto desempenho apresentam temperaturas de ruído da ordem de poucos Kelvin a algumas dezenas de Kelvin ($T_N \sim 5$–$30\,\mathrm{K}$), dependendo da faixa de frequência e da tecnologia empregada. Valores baixos de $T_N$ são essenciais para minimizar a degradação da razão sinal-ruído \cite{hao2025lna}.
+
+    \item \textbf{Largura de banda ($\Delta \nu$):} Define o intervalo de frequências sobre o qual o amplificador opera eficientemente \cite{schweber2013lna}. Em aplicações modernas, busca-se uma largura de banda fracionária elevada (tipicamente superior a 20–30\%), permitindo observações em múltiplas frequências e maior flexibilidade espectral.
+
+    \item \textbf{Linearidade e potência de saída:} O LNA deve operar em regime linear, fornecendo potência suficiente para os estágios subsequentes sem introduzir distorções ou saturação \cite{schweber2013lna}. Parâmetros como ponto de compressão de 1 dB (P1dB) e intercepto de terceira ordem (IP3) são frequentemente utilizados para caracterizar esse comportamento.
+\end{itemize}
+
+A combinação desses parâmetros determina a eficiência do frontend em preservar a informação contida no sinal astrofísico, influenciando diretamente a sensibilidade e a qualidade dos dados observacionais.
+
+\subsection{Temperatura de Sistema}
+
+A temperatura de sistema ($T_{\mathrm{sys}}$) é uma grandeza fundamental em radioastronomia, pois representa a contribuição total de ruído presente na medição \cite{mericia2019hi}. Essa quantidade pode ser expressa como a soma de diferentes componentes:
+
+
+\begin{equation} 
+T_{\mathrm{sys}} =
+T_{\mathrm{rec}} +
+T_{\mathrm{sky}} +
+T_{\mathrm{spillover}} +
+T_{\mathrm{atmosphere}}
+\end{equation}
+
+onde:
+
+\begin{itemize}
+    \item \textbf{$T_{\mathrm{rec}}$:} Temperatura de ruído do receptor, dominada pelo desempenho do LNA e dos componentes eletrônicos do frontend.
+
+    \item \textbf{$T_{\mathrm{sky}}$:} Contribuição do céu, incluindo emissão difusa galáctica, fontes extragalácticas e o fundo cosmológico.
+
+    \item \textbf{$T_{\mathrm{spillover}}$:} Ruído associado à radiação proveniente do solo e de outras fontes fora do campo de visão principal da antena, devido a imperfeições no acoplamento do feixe.
+
+    \item \textbf{$T_{\mathrm{atmosphere}}$:} Contribuição da atmosfera terrestre, que emite e absorve radiação, sendo dependente da frequência e das condições atmosféricas.
+\end{itemize}
+
+A temperatura de sistema estabelece o limite fundamental de sensibilidade do instrumento, sendo diretamente relacionada à incerteza nas medições. Em particular, a minimização de $T_{\mathrm{sys}}$ é essencial para a detecção de sinais fracos, como aqueles associados ao hidrogênio neutro em experimentos de mapeamento de intensidade.
+
+
+\section{Backend Digital}
+
+Entre as principais funções do backend destacam-se a decomposição espectral do sinal e a integração temporal, ambas fundamentais para a extração de informação e melhoria da razão sinal-ruído.
+
+\subsection{Espectrômetro}
+
+O espectrômetro é um componente essencial do backend, responsável por decompor o sinal digitalizado em seus componentes espectrais. Essa decomposição é realizada por meio de técnicas de processamento digital, como a Transformada Rápida de Fourier (FFT), que permite a análise da distribuição de potência do sinal em função da frequência \cite{burke2019introduction}.
+
+Matematicamente, o sinal observado pode ser dividido em canais de largura $\Delta \nu$, de modo que o conteúdo espectral em cada canal $i$ seja dado por:
+
+\begin{equation}
+    S_i(t) = \int_{\nu_i}^{\nu_i + \Delta \nu} S(\nu, t)\, d\nu
+\end{equation}
+
+onde:
+\begin{itemize}
+    \item $S(\nu, t)$ representa o sinal em função da frequência e do tempo;
+    \item $\nu_i$ é a frequência central do canal $i$;
+    \item $\Delta \nu$ é a largura de banda de cada canal.
+\end{itemize}
+
+Essa decomposição permite a construção de espectros dinâmicos e é essencial em experimentos de mapeamento de intensidade, nos quais a informação cosmológica está codificada na estrutura espectral do sinal.
+
+\subsection{Integração Temporal}
+
+A integração temporal consiste na média do sinal ao longo de um intervalo de tempo $\Delta t$, com o objetivo de reduzir o ruído aleatório presente na medição. Esse processo é fundamental para aumentar a sensibilidade do instrumento.
+
+A redução do ruído térmico pode ser descrita pela equação do radiômetro:
+
+\begin{equation}
+    \sigma_T \propto \frac{1}{\sqrt{\Delta \nu \, \Delta t}}
+\end{equation}
+
+Essa relação mostra que a sensibilidade melhora com o aumento da largura de banda e do tempo de integração, embora haja compromissos práticos entre resolução espectral, resolução temporal e volume de dados.
+
+A integração temporal também está diretamente relacionada à geração de \textit{time-ordered data} (TOD), que constituem a base para etapas posteriores de processamento, como calibração e reconstrução de mapas.
+
+\section{Dados Brutos e TOD}
+
+Após as etapas de recepção, amplificação e processamento digital, os sinais observados pelo radiotelescópio são organizados em estruturas de dados temporais que preservam a sequência cronológica das medições. Em radioastronomia, esses dados são geralmente representados na forma de \textit{Time Ordered Data} (TOD), constituindo a base para etapas posteriores de calibração, filtragem, remoção de ruído e reconstrução de mapas.
+
+O TOD representa a forma mais próxima dos dados observacionais brutos após a digitalização e integração temporal, preservando simultaneamente informações instrumentais, temporais e de apontamento.
+
+\subsection{time-ordered data (TOD)}
+
+O \textit{Time Ordered Data} corresponde a uma sequência temporal de medições adquiridas continuamente ao longo da observação \cite{mericia2019hi}
+
+Em cada instante de tempo $t_i$, o sistema registra simultaneamente os valores provenientes dos diferentes canais ou detectores do instrumento.
+
+Matematicamente, o TOD pode ser representado como:
+
+\begin{equation}
+  d(t_i) =
+[d_1(t_i), d_2(t_i), \ldots, d_N(t_i)]
+\end{equation}
+
+
+onde:
+
+\begin{itemize}
+    \item $d_k(t_i)$ representa a medida adquirida pelo detector ou canal $k$ no instante $t_i$;
+
+    \item $N$ corresponde ao número total de canais, receptores ou detectores do sistema.
+\end{itemize}
+
+Em experimentos de radioastronomia, cada amostra do TOD está associada simultaneamente a uma frequência de observação, uma direção apontada no céu e um instante temporal específico.
+
+No contexto do radiotelescópio BINGO, o TOD é composto por medidas de temperatura de brilho registradas em diferentes canais espectrais no intervalo de frequência de aproximadamente 960--1260 MHz, associadas a coordenadas celestes $(\alpha,\delta)$ e ao instante de observação $t_{\mathrm{obs}}$ \cite{mericia2019hi}.
+
+Como o BINGO opera segundo uma estratégia observacional do tipo \textit{drift scan}, sem movimentação contínua da estrutura principal do telescópio, uma mesma região do céu é observada repetidamente ao longo do tempo. Dessa forma, o TOD contém múltiplas amostras associadas às mesmas coordenadas celestes, permitindo o aumento da sensibilidade por integração temporal e a mitigação estatística do ruído instrumental.
+
+
+ Cada amostra do TOD pode ser interpretada como a resposta temporal do instrumento à distribuição de temperatura de brilho do céu modulada pelo feixe da antena. Conforme discutido na Seção~\ref{sec:modelo_de_medicao}, o dado observado resulta da convolução entre o céu astrofísico e a resposta instrumental do radiotelescópio, acrescida das contribuições de ruído e efeitos sistemáticos.
+
+De forma simplificada, a resposta observacional pode ser representada por:
+
+\begin{equation}
+d(t,\nu)
+\sim
+B(\Omega,\nu)
+*
+T_{\mathrm{sky}}(\Omega,\nu)
++
+n(t,\nu),
+\end{equation}
+
+
+Essa relação evidencia que o TOD constitui uma medida convoluída entre o céu astrofísico e a resposta instrumental do radiotelescópio, sendo diretamente dependente da estratégia de observação, do apontamento da antena e das características instrumentais do sistema.
+
+\subsection{Estrutura dos Dados}
+
+Além das medidas científicas propriamente ditas, o TOD inclui informações auxiliares necessárias para o processamento e interpretação dos dados observacionais. De forma geral, a estrutura de um conjunto de TOD pode ser representada esquematicamente como:
+
+\begin{verbatim}
+TOD = {
+    'time': array([t_0, t_1, ..., t_n]),
+
+    'data': array([
+        [d_1(t_0), ..., d_N(t_0)],
+        ...
+        [d_1(t_n), ..., d_N(t_n)]
+    ]),
+
+    'pointing': array([
+        [az(t_0), el(t_0)],
+        ...
+        [az(t_n), el(t_n)]
+    ]),
+
+    'flags': array([...])
+}
+\end{verbatim}
+
+Nessa estrutura:
+
+\begin{itemize}
+    \item \textbf{time:} armazena os instantes temporais associados a cada amostra observacional;
+
+    \item \textbf{data:} contém as medidas registradas por cada detector ou canal ao longo do tempo;
+
+    \item \textbf{pointing:} registra as coordenadas de apontamento da antena, geralmente expressas em azimute (\textit{az}) e elevação (\textit{el});
+
+    \item \textbf{flags:} identifica amostras comprometidas por efeitos instrumentais, interferência de radiofrequência (RFI), saturação ou outras condições inadequadas para análise.
+\end{itemize}
+
+Do ponto de vista computacional, o TOD constitui a principal interface entre a aquisição instrumental e os pipelines de processamento de dados. A partir dessa estrutura são realizadas etapas como calibração, remoção de foregrounds, filtragem temporal e reconstrução de mapas do céu.
+
+Em aplicações de simulação, a geração sintética de TOD é particularmente importante, pois permite reproduzir condições observacionais controladas, testar algoritmos de processamento e avaliar o impacto de ruídos e efeitos sistemáticos sobre a recuperação do sinal astrofísico de interesse.
+
+
+\section{Mapas do Céu}
+
+A reconstrução de mapas constitui uma etapa fundamental em observações radioastronômicas, estabelecendo a conexão entre os \textit{Time Ordered Data} (TOD) adquiridos pelo instrumento e as análises científicas posteriores. No caso de radiotelescópios \textit{single dish} com feixe único, o processo de \textit{map-making} utiliza como entrada séries temporais de dados previamente calibradas, contendo as medições observacionais organizadas ao longo do tempo \cite{Zhang2023}.
+
+Embora o TOD constitua a representação fundamental dos dados observacionais em radioastronomia, a análise científica é frequentemente realizada em mapas do céu, nos quais a informação observada é projetada espacialmente em coordenadas astronômicas. Dessa forma, a principal etapa do pepline de processamento de dados consiste na reconstrução de mapas a partir do TOD.
+
+Esses mapas do ceu são representados na forma de pixels, cada um associado a uma direção específica no céu, e contêm informações de temperatura de brilho ou intensidade associadas a cada pixel \cite{tegmark1997mapmaking}. A construção desses mapas envolve a combinação das medidas temporais do TOD com as informações de apontamento da antena, permitindo a projeção espacial dos dados observacionais.
+
+\subsection{Do TOD ao Mapa}
+
+A reconstrução de mapas a partir do TOD é um processo complexo que envolve a combinação de informações temporais, espaciais e instrumentais. De forma, que cada amostra temporal registrada pelo radiotelescópio corresponde à resposta instrumental associada a uma determinada região do céu observada em um instante específico. Considerando que o feixe da antena já está incorporado ao sinal observado, cada medida do \textit{Time Ordered Data} (TOD) pode ser interpretada como uma combinação linear entre a distribuição de temperatura de brilho do céu e as contribuições de ruído instrumental \cite{Zhang2023}. 
+Nesse contexto, o TOD pode ser modelado como:
+
+\begin{equation}
+  d_t = \sum_p A_{tp} x_p + n_t \label{modelagem_TOD} 
+\end{equation}
+
+
+onde:
+
+\begin{itemize}
+    \item $d_t$ representa a medida observada no instante de tempo $t$;
+    
+    \item $A_{tp}$ corresponde ao elemento da matriz de apontamento que relaciona a amostra temporal $t$ ao pixel $p$ do mapa;
+    
+    \item $x_p$ representa o valor do sinal do céu no pixel $p$;
+    
+    \item $n_t$ descreve a contribuição de ruído instrumental associada à medida temporal.
+\end{itemize}
+
+
+ Na forma matricial:
+
+\begin{equation}
+    d = A m + n \label{matriz_de_apontamento},
+\end{equation}
+
+Sendo, $d$ o vetor de medidas temporais, $A$ a matriz de apontamento, $m$ o vetor de valores do mapa do céu e $n$ o vetor de ruído instrumental.
+
+A matriz de apontamento (\textit{pointing matrix}) é responsável por descrever a correspondência entre as amostras temporais adquiridas pelo instrumento e os pixels do mapa do céu. Matematicamente, a matriz de apontamento é uma matriz esparsa de dimensão $(N_t \times N_p)$, onde $N_t$ representa o número de amostras temporais e $N_p$ o número de pixels do mapa reconstruído \cite{Zhang2023}.
+
+Para observações que envolve multiplos feixes e frequências, a equação~\ref{modelagem_TOD} pode ser generalizada para \cite{Zhang2023}:
+
+\begin{equation}
+  d_{t\nu} = \sum_p A^i_{tp\nu} x_p + n^i_{t\nu} \label{modelagem_TOD_multifeixe}
+\end{equation}
+
+No caso da matriz de apontamento seus votores são definidos como, $A=[A^1, A^2, ..., A^I]$, $d=[d^1, d^2, ..., d^I]$ e $n=[n^1, n^2, ..., n^I]$.
+
+O problema de \textit{map-making} consiste em estimar o mapa $m$ a partir do conjunto de observações temporais. Assumindo ruído gaussiano com matriz de covariância $N$, a solução de máxima verossimilhança pode ser expressa como \cite{tegmark1997mapmaking}:
+
+\begin{equation}
+    \hat{m} = (A^T N^{-1} A)^{-1} A^T N^{-1} d \label{mapmaking_mle}
+\end{equation}
+
+em que:
+
+\begin{itemize}
+    \item $m$ representa o mapa reconstruído;
+    
+    \item $d$ corresponde ao vetor de dados temporais (\textit{TOD});
+    
+    \item $A$ é a matriz de apontamento;
+    
+    \item $N$ representa a matriz de covariância do ruído instrumental.
+\end{itemize}
+
+A equação~\ref{mapmaking_mle} descreve o processo inverso da observação\cite{Zhang2023}, ou seja, enquanto o radiotelescópio projeta o sinal do céu em uma sequência temporal de medições, o \textit{map-making} busca reconstruir a distribuição espacial original a partir dessas observações.
+
+A matriz de apontamento $A$ desempenha papel central nesse processo, pois codifica a geometria da observação, associando cada amostra temporal a um pixel específico do mapa. Já a matriz $N$ incorpora as propriedades estatísticas do ruído, incluindo possíveis correlações temporais introduzidas por efeitos instrumentais, como ruído do tipo $1/f$ \cite{tegmark1997mapmaking}.
+
+Em aplicações práticas, a reconstrução direta utilizando a expressão completa pode se tornar computacionalmente custosa devido à elevada dimensionalidade dos dados observacionais. Por esse motivo, pipelines modernos frequentemente empregam métodos iterativos e técnicas aproximadas para a solução do problema de \textit{map-making}.
+
+\subsection{Projeções Cartográficas}
+
+Após a reconstrução do mapa, a distribuição observada do céu deve ser representada em um sistema de pixelização apropriado. Em radioastronomia, diferentes projeções cartográficas são utilizadas dependendo da geometria do levantamento e da região observada, no entanto, para experimentos de mapeamento de intensidade em larga escala, a projeção HEALPix é amplamente adotada devido às suas propriedades geométricas e computacionais favoráveis.
+
+\subsubsection{HEALPix (\textit{Hierarchical Equal Area isoLatitude Pixelization}):}
+
+  O sistema HEALPix consiste em uma metodologia de discretização da esfera celeste voltada à representação eficiente de funções e dados astronômicos distribuídos angularmente. Sua estrutura combina propriedades geométricas e computacionais que permitem análises numéricas rápidas, particularmente em aplicações envolvendo transformadas em harmônicos esféricos e processamento de mapas cosmológicos. Dessa forma, o HEALPix atua como uma interface entre os dados observacionais e os pipelines de análise científica, sendo amplamente adotado em experimentos modernos de cosmologia e radioastronomia \cite{gorski2005healpix}.
+
+    Em aplicações cosmológicas e em experimentos de mapeamento de intensidade, o esquema de pixelização deve satisfazer determinadas propriedades geométricas e computacionais para garantir precisão numérica e eficiência algorítmica. Entre as principais condições desejáveis para um sistema de pixelização esférica destacam-se \cite{gorski2005healpix}:
+
+\begin{itemize}
+    \item \textbf{Pixels de área igual:} todos os pixels devem possuir a mesma área sólida, evitando vieses estatísticos e simplificando integrações sobre a esfera;
+    
+    \item \textbf{Distribuição homogênea:} os pixels devem apresentar distribuição aproximadamente uniforme sobre a esfera celeste;
+    
+    \item \textbf{Estrutura hierárquica:} o sistema deve permitir subdivisões recursivas para análises em múltiplas resoluções;
+    
+    \item \textbf{Eficiência computacional:} a geometria da pixelização deve facilitar operações matemáticas como transformadas em harmônicos esféricos e buscas espaciais;
+    
+    \item \textbf{Localidade espacial:} pixels vizinhos na esfera devem possuir indexação próxima, reduzindo custos computacionais em algoritmos de processamento.
+\end{itemize}
+
+A principal característica do HEALPix é a divisão da esfera em pixels de áreas iguais, organizados hierarquicamente e distribuídos em anéis de latitude constante (\textit{iso-latitude}). Essa estrutura permite que operações matemáticas fundamentais, como transformadas em harmônicos esféricos, sejam realizadas de maneira significativamente mais eficiente quando comparadas a outros sistemas de pixelização não iso-latitude. Inicialmente, a esfera é dividida em 12 pixels-base organizados em três regiões: duas regiões polares contendo quatro pixels cada e uma região equatorial contendo quatro pixels adicionais \cite{gorski2005healpix}.
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=.25]{Figuras/healpix_estrutura.png}
+\caption{Representação esquemática da estrutura hierárquica quadrilateral do HEALPix. À esquerda, um pixel-base subdividido em quatro regiões; à direita, o refinamento hierárquico (\textit{upgrade}) gerando subpixels adicionais e preservando a indexação espacial. O processo inverso (\textit{degrade}) permite reduzir a resolução angular do mapa por agrupamento hierárquico dos pixels. Fonte: Adaptado de \cite{gorski2005healpix}.}
+\label{fig:healpix_estrutura}
+\end{figure}
+
+ A resolução do mapa é então controlada pelo parâmetro \(N_{\mathrm{side}}\), que define o número de subdivisões realizadas em cada lado dos pixels-base \cite{gorski2005healpix}. O número total de pixels do mapa é dado por:
+
+\begin{equation}
+N_{\mathrm{pix}} = 12 N_{\mathrm{side}}^2
+\end{equation}
+
+enquanto a área sólida associada a cada pixel é expressa por:
+\begin{equation}
+    \Omega_{\mathrm{pix}} =
+\frac{4\pi}{N_{\mathrm{pix}}}
+=
+\frac{\pi}{3N_{\mathrm{side}}^2}
+\end{equation}
+
+A resolução angular característica de cada pixel pode ser aproximada por:
+
+\begin{equation}
+    \theta_{\mathrm{pix}}
+\simeq
+\sqrt{\Omega_{\mathrm{pix}}}
+\end{equation}
+
+Uma das propriedades mais importantes do HEALPix é sua organização hierárquica. Cada pixel pode ser subdividido recursivamente em quatro subpixels, formando uma estrutura em árvore (\textit{nested scheme}) que facilita operações computacionais como buscas espaciais, análise multirresolução e processamento paralelo.
+
+Além disso, os centros dos pixels são posicionados sobre anéis de latitude constante, característica que reduz significativamente o custo computacional associado às transformadas em harmônicos esféricos. Essa propriedade é particularmente importante em aplicações cosmológicas envolvendo análise espectral da Radiação Cósmica de Fundo (CMB) e mapeamentos de intensidade em rádio \cite{gorski2005healpix}
+
+\section{Sistema de Controle}
+
+Além da cadeia de aquisição de sinais, radiotelescópios modernos dependem de um sistema de controle responsável pela coordenação operacional do instrumento e pela sincronização entre os diferentes subsistemas eletrônicos e mecânicos. Em experimentos de radioastronomia, especialmente aqueles voltados ao mapeamento contínuo do céu, o sistema de controle desempenha papel fundamental na estabilidade observacional, no gerenciamento das estratégias de varredura e na integridade temporal dos dados adquiridos.
+
+De forma geral, o sistema de controle integra os subsistemas de apontamento, aquisição de dados, sincronização temporal e configuração instrumental, garantindo que as observações sejam executadas de maneira coordenada e consistente ao longo do tempo.
+
+\subsection{Controlador de Observação}
+
+Dentro dessa arquitetura, o controlador de observação constitui o núcleo lógico responsável pela coordenação operacional do instrumento. Em arquiteturas modernas de radioastronomia, esse sistema utiliza cronogramas observacionais e tabelas de configuração para enviar comandos sincronizados aos diferentes subsistemas instrumentais. Frequentemente, tais comandos são associados a referências temporais absolutas obtidas por sistemas GPS, permitindo sincronização precisa entre aquisição do TOD, informações de apontamento e configuração instrumental, mesmo na presença de latências e jitter introduzidos pelos sistemas de comunicação \cite{tingay2013mwa}.
+
+Além da execução automatizada de comandos, o controlador pode realizar ajustes dinâmicos durante a observação, possibilitando adaptar estratégias observacionais conforme condições instrumentais, disponibilidade de regiões do céu ou critérios científicos previamente definidos.
+
+Entre as principais funções do controlador de observação destacam-se:
+
+\begin{itemize}
+    \item \textbf{Sequenciamento de comandos:} Coordena a execução ordenada das operações observacionais, incluindo inicialização dos receptores, configuração dos modos de aquisição e controle das etapas do pipeline instrumental.
+
+    \item \textbf{Apontamento do telescópio:} Controla o posicionamento angular da antena, garantindo que o instrumento observe as coordenadas celestes desejadas segundo a estratégia de varredura definida \cite{wilson2013tools}.
+
+    \item \textbf{Configuração instrumental:} Permite ajustar parâmetros operacionais dos subsistemas eletrônicos, como frequência central, largura de banda, ganho eletrônico e taxas de aquisição.
+
+    \item \textbf{Sincronização temporal:} Assegura consistência temporal entre os dados adquiridos e as informações de apontamento do telescópio \cite{tingay2013mwa}, aspecto essencial para a construção precisa do \textit{Time Ordered Data} (TOD) e para os processos posteriores de \textit{map-making}.
+\end{itemize}
+
+A operação coordenada desses subsistemas é essencial para garantir estabilidade instrumental, rastreabilidade temporal e consistência entre os dados observacionais e as informações de apontamento. Essas propriedades são fundamentais para a construção adequada do TOD e para a posterior reconstrução dos mapas do céu.
+
+\subsection{Modos de Operação}
+
+Os modos de operação observacional definem a estratégia utilizada pelo radiotelescópio para realizar a aquisição de dados ao longo do tempo. Essas estratégias determinam a forma de varredura do céu, o comportamento do sistema de apontamento e as propriedades estatísticas do \textit{Time-Ordered Data} (TOD), influenciando diretamente a cobertura angular, a sensibilidade observacional e os efeitos sistemáticos presentes nos dados.
+
+Esses modos de operação correspondem ao conjunto de instruções e rotinas responsáveis por coordenar o movimento da antena, a sincronização temporal e a aquisição contínua dos dados instrumentais. Dessa forma, diferentes estratégias observacionais impõem diferentes requisitos ao controlador de observação, particularmente em relação à precisão de apontamento, estabilidade temporal e gerenciamento da taxa de aquisição de dados.
+
+Entre os principais modos utilizados em radioastronomia destacam-se o \textit{On-The-Fly Mapping} (OTF), o \textit{Raster Scan}, o \textit{Position Switching} e o \textit{Drift Scan}.
+
+\begin{itemize}
+
+    \item \textbf{On-The-Fly Mapping (OTF):} 
+    Nesse modo, a aquisição de dados ocorre continuamente durante o movimento da antena \cite{GBTog2011_green, MangumEmersonGreisen2007_on_the_fly}. O sistema de controle deve garantir sincronização precisa entre posição angular e aquisição temporal, permitindo a construção de mapas contínuos do céu com elevada eficiência observacional.
+
+    \item \textbf{Raster Scan:}
+    Consiste em uma varredura sistemática realizada em linhas sucessivas, formando uma grade aproximadamente retangular sobre a região observada. Nesse modo, o controlador coordena os ciclos de posicionamento, estabilização mecânica e integração dos dados em cada ponto da malha observacional \cite{INAF_MappingTechniques_raster}.
+
+    \item \textbf{Position Switching:}
+    Estratégia observacional baseada na alternância entre uma posição contendo a fonte de interesse (ON) e uma posição de referência (OFF) \cite{GBTog2011_green}. O sistema de controle é responsável por sincronizar as transições entre ambas as posições, assegurando consistência temporal entre as medições utilizadas no processo de calibração.
+
+    \item \textbf{Drift Scan:} Nesse modo, a antena permanece fixa enquanto a rotação da Terra realiza naturalmente a varredura do céu através do feixe instrumental \cite{chatterjee2023driftscan}. O sistema de controle atua principalmente na sincronização temporal e no monitoramento instrumental durante a aquisição contínua dos dados.
+
+\end{itemize}
+
+Cada modo observacional produz padrões distintos de amostragem espacial e temporal, influenciando diretamente a estrutura do TOD, a correlação do ruído instrumental e os processos posteriores de reconstrução de mapas. As propriedades físicas e estatísticas associadas a essas estratégias observacionais foram discutidas em maior detalhe na seção \ref{tipo_de_obeservação}.
+
+O experimento BINGO,  utiliza  predominantemente a estratégia observacional do tipo \textit{Drift Scan}. Que como já mencionado, esse estrategia baseia-se em manter a antena fixa enquanto a rotação da Terra realiza naturalmente a varredura do céu através do feixe instrumental. Essa abordagem reduz a complexidade mecânica do sistema, aumenta a estabilidade observacional e produz séries temporais altamente adequadas para técnicas de mapeamento de intensidade (\textit{Intensity Mapping}). Além disso, a repetição natural das observações sobre as mesmas regiões do céu contribui para a redução de ruído estatístico e para a mitigação de efeitos sistemáticos durante os processos de reconstrução de mapas.
+
+\section{Sensores e Dados Auxiliares}
+
+Além dos dados científicos provenientes da cadeia principal de aquisição, radiotelescópios modernos registram continuamente informações auxiliares relacionadas às condições ambientais, ao estado operacional do instrumento e à geometria observacional. Esses dados complementares desempenham papel central na interpretação física das observações, permitindo monitoramento da estabilidade instrumental, rastreamento de efeitos sistemáticos e associação correta entre cada medida e as condições sob as quais foi adquirida.
+
+Em termos operacionais, os dados auxiliares podem ser organizados em três grupos principais: sensores ambientais, dados de \textit{housekeeping} e informações de efemérides astronômicas.
+
+\subsection{Sensores Ambientais}
+
+Sensores ambientais são utilizados para monitorar continuamente condições externas que podem influenciar direta ou indiretamente o desempenho observacional do radiotelescópio \cite{itu2013radioastronomy}.  Embora não atuem sobre o sinal astronômico propriamente dito, esses parâmetros afetam a resposta instrumental, a estabilidade eletrônica e, em determinadas faixas espectrais, o próprio conteúdo do sinal recebido.
+
+Os principais parâmetros monitorados incluem:
+
+\begin{itemize}
+    \item \textbf{Temperatura ambiente:} Variações térmicas afetam o comportamento dos componentes eletrônicos do sistema receptor, incluindo deriva de ganho, estabilidade dos amplificadores e alterações mecânicas na estrutura da antena. Em observações de longa duração, essas flutuações podem produzir assinaturas sistemáticas correlacionadas temporalmente \cite{wilson2013tools,thompson2017interferometry}.
+
+    \item \textbf{Umidade relativa:} A umidade pode impactar a absorção atmosférica, especialmente em frequências mais altas, e também pode contribuir para a degradação de componentes eletrônicos sensíveis à umidade \cite{kraus1986radio,wilson2013tools}.
+
+    \item \textbf{Pressão atmosférica:} A pressão influencia a densidade do ar e, consequentemente, a absorção e emissão atmosférica, afetando a temperatura de sistema e a calibração dos dados observacionais \cite{kraus1986radio,thompson2017interferometry}.
+.
+
+    \item \textbf{Velocidade e direção do vento:} Condições de vento podem introduzir vibrações mecânicas na estrutura do telescópio, afetando o apontamento e a estabilidade do feixe instrumental, prejudicando a qualidade dos dados observacionais especialmehte em observações contínuas e integrações prolongadas \cite{thompson2017interferometry,GBTog2011_green}.
+
+\end{itemize}
+
+Essas grandezas ambientais constituem variáveis de controle essenciais para a interpretação física dos dados observacionais, permitindo a identificação de possíveis correlações entre variações instrumentais e condições externas, bem como a implementação de estratégias de mitigação de efeitos sistemáticos associados a essas condições.
+
+
+\subsection{Dados de Housekeeping}
+
+Dados de \textit{housekeeping} correspondem ao conjunto de informações internas registradas pelo sistema de controle e monitoramento do instrumento durante a operação observacional. Diferentemente do sinal científico, esses dados descrevem o estado funcional do radiotelescópio ao longo do tempo. Em sistemas modernos de radioastronomia, esses dados constituem parte integrante da infraestrutura de controle e monitoramento, permitindo rastrear o comportamento dos subsistemas instrumentais ao longo da observação \cite{marais2015meerkat,woody2007control}.
+
+Em geral, os dados de \textit{housekeeping} incluem parâmetros como:
+
+\begin{itemize}
+
+\item estado operacional dos receptores;
+
+\item níveis de alimentação elétrica;
+
+\item temperaturas internas dos módulos eletrônicos;
+
+\item ganhos e configurações instrumentais;
+
+\item informações de sincronização temporal;
+
+\item eventos de inicialização, falhas e reconfigurações.
+
+\end{itemize}
+
+Esses registros são normalmente armazenados juntamente com os metadados da observação e utilizados posteriormente para controle de qualidade (\textit{quality assurance}), geração de máscaras temporais (\textit{flags}) e identificação de períodos inadequados para análise científica.
+
+A integração entre \textit{housekeeping} e TOD permite associar anomalias observacionais a condições instrumentais específicas, reduzindo vieses na reconstrução dos mapas e aumentando a confiabilidade das análises posteriores.
+
+
+\subsection{Efemérides Astronômicas}
+
+Efemérides astronômicas correspondem a tabelas ou bancos de dados que fornecem informações precisas sobre as posições, movimentos e características de objetos celestes ao longo do tempo. Em radioastronomia, essas informações são essenciais para a correta associação entre as medidas observacionais e as coordenadas celestes correspondentes, permitindo a construção precisa de mapas do céu, relacionado cada amostra temporal do TOD com a geometria instantânea da observação  \cite{meeus1998astronomical,seidelmann2006explanatory}.
+
+
+Entre os principais parâmetros empregados destacam-se:
+
+\begin{itemize}
+
+\item \textbf{Posição solar:}
+
+utilizada para identificação de períodos sujeitos à contaminação por emissão solar direta ou indireta \cite{seidelmann2006explanatory}.
+
+\item \textbf{Posição lunar:}
+
+importante para monitoramento de contribuições adicionais ao fundo observado e avaliação de condições observacionais\cite{meeus1998astronomical}.
+
+\item \textbf{Objetos do Sistema Solar:}
+
+permitem prever cruzamentos do feixe instrumental com fontes móveis que possam introduzir assinaturas temporárias nos dados \cite{meeus1998astronomical,ahmed2015_phys_eng_detection}.
+
+\end{itemize}
+
+Essas efemérides são frequentemente integradas ao sistema de controle do radiotelescópio, permitindo a geração automática de máscaras temporais para períodos de observação comprometidos por fontes celestes indesejadas, bem como a associação correta entre cada amostra do TOD e as coordenadas celestes correspondentes. Dessa forma, as efemérides astronômicas constituem um componente fundamental para a interpretação física dos dados observacionais e para a construção precisa dos mapas do céu.
+
+Em conjunto, sensores ambientais, dados de \textit{housekeeping} e efemérides constituem uma camada complementar ao fluxo principal de aquisição, fornecendo informações essenciais para validação observacional, modelagem instrumental e interpretação científica dos dados obtidos.
+
+\section{Modelagem de Ruídos}
+
+O sinal captado por um radiotelescópio representa uma combinação entre emissão astrofísica,  ruído instrumental e contribuições indesejadas introduzidas durante o processo de observação \cite{mericia2019hi}. Essas contribuições se somadam ao sinal de interesse impactando a sensibilidade e a qualidade dos produtos científicos derivados, como séries temporais observacionais e mapas do céu.
+
+De forma geral, os efeitos que degradam os dados podem ser classificados em duas categorias principais: ruídos aleatórios, que correspondem a flutuações estocásticas associadas a processos físicos e eletrônicos; e efeitos sistemáticos, que se manifestam como assinaturas não aleatórias introduzidas por imperfeições instrumentais, condições ambientais ou estratégias observacionais.
+
+Entre os mecanismos mais relevantes em radioastronomia destacam-se o ruído térmico, o ruído correlacionado do tipo \(1/f\) e as interferências por radiofrequência (RFI).
+
+\subsection{Ruído Térmico}
+
+O ruído térmico corresponde às flutuações estatísticas associadas a movimentação aleatoria dos eletrons em componentes eletrônicos, como amplificadores e receptores \cite{mericia2019hi}. Esse tipo de ruído é caracterizado por uma distribuição gaussiana e estabelece o limite fundamental de sensibilidade do instrumento e depende diretamente da temperatura total do sistema previamente definida como \(T_{\mathrm{sys}}\) \cite{wilson2013tools,burke2019introduction}.
+
+Em um receptor típico, elementos como amplificadores de baixo ruído, linhas de transmissão, detectores e demais componentes eletrônicos produzem flutuações elétricas aleatórias que se propagam ao longo da cadeia de recepção. Como consequência, a potência medida na saída do sistema corresponde à combinação entre o sinal proveniente do céu e uma contribuição adicional associada ao ruído interno do instrumento \cite{marr_snell_kurtz_2015}.
+
+ No contexto do BINGO, a sensibilidade instantânea dos receptores pode ser estimada por meio da expressão adotada nas simulações instrumentais do experimento \cite{abdalla2022bingoI}:
+
+\begin{equation}
+\sigma_N=
+K,T_{\mathrm{sys}}
+\sqrt{
+\frac{1}{\tau \Delta \nu}
++
+\left(
+\frac{\Delta G}{G}
+\right)^2
+},
+\label{eq:bingo_noise}
+\end{equation}
+
+onde \(T_{\mathrm{sys}}\) representa a temperatura de sistema, \(\tau\) é o tempo de integração, \(\Delta\nu\) corresponde à largura de banda observada, \(G\) é o ganho médio do receptor e \(\Delta G\) descreve as flutuações estocásticas de ganho. Para o receptor correlacionado adotado pelo BINGO, o fator instrumental assume valor \(K=\sqrt{2}\) \cite{abdalla2022bingoI}.
+
+A Equação \ref{eq:bingo_noise} evidencia que a sensibilidade do instrumento é limitada não apenas pelo ruído térmico associado ao processo de detecção, mas também pelas instabilidades de ganho presentes na cadeia eletrônica. No limite ideal em que \(\Delta G/G \rightarrow 0\), recupera-se o comportamento previsto pela equação clássica do radiômetro.
+
+
+\subsection{Ruído do tipo \(1/f\)}
+
+Além do ruído térmico, sistemas receptores reais apresentam componentes correlacionadas temporalmente conhecidas como ruído do tipo \(1/f\). Esse tipo de ruído é produzido pelo derivações eletrônicas lentas, deriva de ganho e instabilidades instrumentais. O ruído \(1/f\) é caracterizado por uma densidade espectral de potência que decresce com a frequência, resultando em flutuações de baixa frequência que podem introduzir assinaturas sistemáticas nos dados observacionais \cite{thompson2017interferometry,mericia2019hi}.
+
+A presença de ruído \(1/f\) pode ser modelada por uma função de potência do tipo:
+
+\begin{equation}
+P(f)\propto
+\frac{1}{f^{\alpha}}
+\end{equation}
+
+onde \(P(f)\) representa a potência espectral na frequência temporal \(f\) e \(\alpha\) descreve o grau de correlação temporal do processo.
+
+Em sistemas reais, como nos receptores do BINGO, a contribuição total do ruído é representada por \cite{abdalla2022bingoI}:
+
+\begin{equation}
+    P(f) = \sigma_N^2 \left[1 + \left(\frac{f_k}{f}\right)^{\alpha}\right]
+    \label{eq}
+\end{equation}
+
+onde \(P(f)\) é a densidade espectral de potência, \(\sigma_N \) é a sensibilidade radiométrica definida pela Equação \ref{eq}, \(f\) é a frequência temporal, \(f_k\) é a frequência de joelho (\textit{knee frequency}) e \(\alpha\) é o índice espectral do ruído correlacionado.
+
+A frequência de joelho corresponde ao ponto em que as contribuições do ruído branco e do ruído correlacionado possuem a mesma potência. Para frequências inferiores a \(\nu_k\), o ruído \(1/f\) passa a dominar o espectro temporal dos dados, introduzindo correlações de longo alcance no TOD e produzindo estruturas artificiais de grande escala nos mapas reconstruídos \cite{abdalla2022bingoI,guillen2023_bingo}.
+Em observações contínuas e de longa duração, como as realizadas pelo BINGO, o ruído térmico manifesta-se como flutuações estatísticas independentes entre amostras consecutivas, enquanto o ruído \(1/f\) produz correlações temporais persistentes ao longo do TOD. A presença simultânea dessas componentes reforça a necessidade de uma abordagem integrada para simulação e processamento dos dados, na qual os efeitos instrumentais sejam incorporados de forma consistente.
+
+Por esse motivo, modelos de ruído térmico e ruído correlacionado são incluídos nos pipelines de simulação do experimento, permitindo avaliar seus impactos sobre o TOD, sobre os algoritmos de reconstrução de mapas e sobre a recuperação do sinal cosmológico esperado.
+%----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+\subsection{Interferência por Radiofrequência (RFI)}
+
+Observações em radioastronomia são particularmente sensíveis à presença de sinais eletromagnéticos artificiais que compartilham parcial ou totalmente a mesma faixa espectral utilizada para aquisição dos sinais astronômicos. Essas contribuições são denominadas interferências por radiofrequência (\textit{Radio Frequency Interference} — RFI) e constituem uma das principais limitações para observações em rádio, especialmente devido à baixa intensidade dos sinais cosmológicos quando comparados às fontes artificiais \cite{csiro_atnf_spectrum,Pimental2022}.
+
+As fontes de RFI podem possuir origem terrestre ou orbital. Interferências terrestres incluem transmissores de telecomunicações, redes sem fio, equipamentos eletrônicos e emissões produzidas pelo próprio sistema observacional. Já fontes orbitais, como satélites de comunicação e navegação, apresentam comportamento dinâmico devido ao movimento relativo em relação ao instrumento, produzindo assinaturas temporais e espectrais variáveis ao longo da observação \cite{harper2018potential}.
+
+Entre as principais fontes de RFI destacam-se:
+
+\begin{itemize}
+
+\item sinais provenientes de satélites de comunicação e navegação;
+
+\item transmissores terrestres de telecomunicações;
+
+\item emissões geradas pela eletrônica local do sistema observacional.
+
+\end{itemize}
+
+Do ponto de vista observacional, o sinal adquirido pelo radiotelescópio pode ser representado como a combinação entre contribuição astrofísica, ruído instrumental e interferência artificial:
+
+\begin{equation}
+d(t,\nu)
+=
+s(t,\nu)
++
+n(t,\nu)
++
+r(t,\nu),
+\end{equation}
+
+onde \(d(t,\nu)\) representa o dado observado, \(s(t,\nu)\) corresponde ao sinal astronômico de interesse, \(n(t,\nu)\) representa o ruído do sistema e \(r(t,\nu)\) descreve a contribuição associada à RFI.
+
+Diferentemente do ruído térmico, frequentemente aproximado por processos gaussianos estacionários, a RFI tende a apresentar estruturas espectrais estreitas, assinaturas impulsivas ou padrões temporais correlacionados, violando hipóteses estatísticas frequentemente utilizadas em métodos convencionais de processamento de dados \cite{ford_buch_2014_rfi}.
+
+Em termos instrumentais, a presença de RFI pode elevar artificialmente a temperatura equivalente do sistema, introduzir saturação em canais espectrais e contaminar o \textit{Time Ordered Data} (TOD), comprometendo etapas posteriores de reconstrução de mapas e separação de componentes.
+
+Por esse motivo, pipelines modernos de radioastronomia incorporam rotinas de monitoramento espectral, detecção automática de anomalias, mascaramento de canais contaminados e técnicas estatísticas de mitigação para reduzir o impacto dessas interferências sobre os produtos científicos finais \cite{Pimental2022}.
+
+\section{Céu Local e Efeitos Atmosféricos}
+
+O sinal captado por um radiotelescópio é influenciado não apenas por processos astrofísicos e ruídos instrumentais, mas também por efeitos associados ao ambiente local e à atmosfera terrestre \cite{Souza2024}. Esses efeitos podem introduzir variações temporais e espectrais no sinal observado, impactando a qualidade dos dados e a precisão das análises científicas subsequentes.
+
+A atmosfera terrestre, embora transparente em muitas faixas de rádio, pode introduzir absorção, emissão e variações de índice de refração que afetam a propagação do sinal astronômico até o instrumento \cite{thompson2017interferometry}. Além disso, o ambiente local, incluindo a topografia, a presença de fontes de interferência e as condições climáticas, pode influenciar diretamente a qualidade das observações.
+
+Dentes os efeitos associados ao ambiente local e à atmosfera, destacam-se a absorção atmosférica, a emissão térmica atmosférica, a variação do índice de refração e a influência de fontes terrestres próximas \cite{Souza2024,Pimental2022}.
+
+\subsection{Absorção Atmosférica}
+
+Durante a propagação do sinal astronômico pela atmosfera terrestre, parte da radiação incidente é absorvida por moléculas atmosféricas, principalmente vapor d'água (\(\mathrm{H_2O}\)), oxigênio molecular (\(\mathrm{O_2}\)) e, em menor grau, dióxido de carbono e ozônio \cite{thompson2017interferometry,wilson2013tools}. Esse processo reduz a potência efetivamente recebida pelo radiotelescópio e modifica as propriedades radiométricas da observação.
+
+A magnitude da absorção atmosférica depende da frequência observacional, das condições meteorológicas e do comprimento do caminho óptico atravessado pela radiação na atmosfera. Em observações realizadas em baixos ângulos de elevação, o sinal percorre uma coluna atmosférica maior, aumentando os efeitos de absorção e emissão associados ao meio atmosférico.
+
+A atmosfera não apenas absorve a radiação incidente, mas também emite radiação térmica devido à sua temperatura física finita. Assim, a contribuição atmosférica observada pode ser descrita em termos da temperatura de brilho atmosférica \cite{thompson2017interferometry}:
+
+\begin{equation}
+T_B =
+T_{\mathrm{atm}}
+\left(
+1 - e^{-\tau_0 \sec\theta_z}
+\right),
+\label{eq:atm_brightness}
+\end{equation}
+
+onde \(T_{\mathrm{atm}}\) representa a temperatura física efetiva da atmosfera, \(\tau_0\) corresponde à opacidade zenital atmosférica e \(\theta_z\) é o ângulo zenital da observação.
+
+A presença do fator \(\sec\theta_z\) reflete o aumento aproximado do caminho óptico atmosférico para observações realizadas em menores elevações. Dessa forma, tanto a absorção quanto a emissão atmosférica tornam-se mais intensas à medida que a linha de visada se aproxima do horizonte.
+
+No regime de atmosfera opticamente fina, isto é, quando
+
+\[
+\tau_0 \sec\theta_z \ll 1,
+\]
+
+a exponencial da Equação~(\ref{eq:atm_brightness}) pode ser expandida em primeira ordem, resultando em
+
+\begin{equation}
+T_B \approx
+T_{\mathrm{atm}}
+\tau_0
+\sec\theta_z.
+\label{eq:atm_linear}
+\end{equation}
+
+Essa aproximação mostra que, para pequenas opacidades, a contribuição atmosférica cresce aproximadamente de forma linear com a massa de ar atravessada pela radiação.
+
+Em aplicações instrumentais, a emissão atmosférica contribui diretamente para o aumento da temperatura de sistema \(T_{\mathrm{sys}}\), elevando o nível efetivo de ruído e reduzindo a sensibilidade observacional prevista pela equação do radiômetro. Como consequência, efeitos atmosféricos tornam-se particularmente relevantes em observações de longa integração, em frequências elevadas ou em experimentos que exigem elevada estabilidade radiométrica.
+
+\subsection{Emissão Atmosférica}
+
+A atmosfera terrestre não apenas absorve parte da radiação incidente, mas também emite radiação térmica própria devido à sua temperatura finita. Essa emissão adiciona potência ao sinal detectado pelo radiotelescópio e contribui diretamente para o aumento da temperatura equivalente do sistema \cite{thompson2017interferometry,Souza2024}.
+
+Os principais mecanismos responsáveis pela emissão atmosférica estão associados à presença de moléculas capazes de absorver e reemitir radiação eletromagnética em determinadas faixas espectrais. Entre os constituintes atmosféricos mais relevantes destacam-se \cite{wilson2013tools,thompson2017interferometry}:
+
+\begin{itemize}
+
+\item \textbf{Vapor d'água ($\mathrm{H_2O}$):}
+responsável por linhas de absorção e emissão que se tornam progressivamente mais relevantes em frequências elevadas e em condições de alta umidade atmosférica.
+
+\item \textbf{Oxigênio molecular ($\mathrm{O_2}$):}
+apresenta bandas de absorção distribuídas em regiões específicas do espectro de rádio e contribui significativamente para a emissão atmosférica em determinadas frequências.
+
+\item \textbf{Ozônio ($\mathrm{O_3}$):}
+embora normalmente apresente contribuição menos intensa, pode influenciar observações realizadas em janelas espectrais específicas.
+
+\end{itemize}
+
+A emissão atmosférica atua como uma contribuição adicional ao ruído do sistema, elevando a temperatura de sistema e reduzindo a sensibilidade efetiva do instrumento.
+
+\subsection{Refração Atmosférica}
+
+A refração atmosférica corresponde à curvatura do caminho óptico percorrido pelo sinal astronômico devido à variação do índice de refração da atmosfera terrestre \cite{thompson2017interferometry}. Esse efeito altera a direção aparente de chegada da radiação, produzindo pequenos deslocamentos angulares na posição observada das fontes celestes.
+
+Embora esses deslocamentos sejam geralmente pequenos em frequências de rádio, eles podem tornar-se relevantes em observações que exigem elevada precisão de apontamento ou integrações prolongadas.
+
+Em primeira aproximação, o desvio angular associado à refração atmosférica pode ser expresso como \cite{thompson2017interferometry}:
+
+\begin{equation}
+\Delta z \simeq (n_0 - 1)\tan z,
+\end{equation}
+
+onde $\Delta z$ representa o deslocamento angular aparente, $n_0$ é o índice de refração atmosférico próximo à superfície terrestre e $z$ corresponde ao ângulo zenital da observação.
+
+Essa relação mostra que os efeitos de refração tornam-se mais pronunciados para observações realizadas em baixos ângulos de elevação, isto é, próximas ao horizonte, onde o caminho óptico através da atmosfera é maior. Em radioastronomia, a magnitude desse efeito depende das condições atmosféricas locais, incluindo temperatura, pressão e conteúdo de vapor d'água \cite{thompson2017interferometry}.
+
+A refração atmosférica afeta diretamente a precisão de apontamento e pode introduzir erros sistemáticos na associação entre as amostras temporais do TOD e as coordenadas celestes correspondentes. Consequentemente, esse efeito pode impactar etapas posteriores de construção de mapas e calibração observacional caso não seja adequadamente modelado ou corrigido.
+
+\section{Pipeline de Simulação vs. Observação Real}
+
+Em experimentos radioastronômicos, o fluxo de aquisição e processamento de dados envolve múltiplas etapas instrumentais e computacionais responsáveis por transformar a radiação proveniente do céu em produtos científicos utilizáveis, como mapas, espectros e estimativas cosmológicas. Nesse contexto, pipelines de simulação desempenham papel fundamental ao reproduzir computacionalmente diferentes etapas do processo observacional, permitindo avaliar o desempenho instrumental, testar algoritmos de processamento e investigar efeitos sistemáticos antes mesmo da aquisição de dados reais \cite{mericia2019hi,melo202Xbingo}.
+
+De forma geral, tanto observações reais quanto simulações seguem cadeias de processamento conceitualmente semelhantes, diferindo principalmente na origem do sinal de entrada e no grau de controle sobre os parâmetros instrumentais e ambientais.
+
+\subsection{Fluxo em Observação Real}
+
+Na aquisição observacional real, o fluxo de dados inicia-se com a recepção da radiação eletromagnética proveniente do céu pelo sistema de antenas do radiotelescópio. O sinal captado é convertido em sinais elétricos pelos receptores e posteriormente processado por uma cadeia eletrônica composta por amplificadores, filtros, conversores analógico-digitais e sistemas de aquisição, resultando na geração do \textit{Time Ordered Data} (TOD) bruto \cite{ramalho2023impactos}.
+
+De maneira simplificada, o fluxo observacional pode ser representado por:
+
+\begin{center}
+Céu \(\rightarrow\) Telescópio \(\rightarrow\) Frontend \(\rightarrow\) Backend \(\rightarrow\) TOD \(\rightarrow\) Processamento \(\rightarrow\) Mapas
+\end{center}
+
+O frontend corresponde aos subsistemas responsáveis pela recepção e amplificação inicial do sinal de rádio, enquanto o backend engloba os sistemas de digitalização, processamento espectral e armazenamento dos dados.
+
+Do ponto de vista matemático, o processo observacional pode ser descrito pela equação~\eqref{matriz_de_apontamento}, onde o dado observado \(d\) é modelado como a combinação entre a resposta instrumental \(A\) aplicada ao sinal do céu \(m\) e um termo de ruído \(n\):
+
+\begin{equation}
+d = A m + n,
+\label{eq:modelo_obs}
+\end{equation}
+
+Durante a aquisição, a resposta instrumental produz uma convolução angular entre o céu verdadeiro e o feixe efetivo da antena. Além disso, os sistemas eletrônicos introduzem efeitos adicionais associados ao ruído térmico, instabilidades de ganho, ruído \(1/f\) e interferências externas \cite{ramalho2023impactos}.
+
+O TOD gerado constitui a principal entrada para as etapas posteriores de calibração, filtragem e reconstrução de mapas, nas quais busca-se estimar a distribuição espacial da emissão observada no céu.
+
+\subsection{Fluxo em Pipeline de Simulação}
+
+Pipelines de simulação constituem conjuntos de rotinas computacionais desenvolvidas para reproduzir, de forma controlada e parametrizada, os principais processos físicos e instrumentais envolvidos na aquisição de dados radioastronômicos \cite{mericia2019hi}. Em experimentos dedicados ao mapeamento do céu, essas ferramentas desempenham papel central na avaliação do desempenho instrumental, no desenvolvimento de algoritmos de processamento e na investigação do impacto de diferentes fontes de ruído e efeitos sistemáticos sobre os produtos científicos finais.
+
+Diferentemente do fluxo observacional real, no qual a entrada do sistema corresponde ao sinal proveniente do céu físico, em um pipeline de simulação a aquisição inicia-se a partir de modelos sintéticos do céu. Esses modelos podem incluir distribuições espaciais e espectrais da emissão cosmológica, foregrounds galácticos, fontes extragalácticas e componentes atmosféricas, dependendo dos objetivos da simulação \cite{mericia2019hi}.
+
+O fluxo de simulação pode ser representado por:
+
+\begin{center}
+Modelo de Céu
+\(\rightarrow\)
+Modelo Instrumental
+\(\rightarrow\)
+TOD Sintético
+\(\rightarrow\)
+Processamento
+\(\rightarrow\)
+Mapas Simulados
+\end{center}
+
+Do ponto de vista matemático, o processo de simulação busca reproduzir a mesma cadeia de medição presente na observação real. Assim, o dado sintético pode ser modelado como
+
+\begin{equation}
+d_{\mathrm{sim}} = A m_{\mathrm{sim}} + n_{\mathrm{sim}},
+\label{eq:modelo_sim}
+\end{equation}
+
+onde \(m_{\mathrm{sim}}\) representa o modelo sintético do céu, \(A\) corresponde ao operador instrumental utilizado na simulação e \(n_{\mathrm{sim}}\) descreve componentes artificiais de ruído e sistemáticos instrumentais.
+
+No contexto do radiotelescópio BINGO, o operador instrumental incorpora efeitos associados ao padrão de feixe da antena, à estratégia de observação, à resposta espectral do sistema receptor e à geometria de varredura adotada durante as observações \cite{mericia2019hi}. Como consequência, o TOD sintético produzido pela simulação procura reproduzir as propriedades estatísticas e correlacionais esperadas nos dados observacionais reais, incluindo estruturas temporais, espectrais e espaciais introduzidas pelo processo instrumental.
+
+De maneira mais geral, o operador instrumental pode ser interpretado como uma transformação que projeta o modelo do céu no domínio temporal observado pelo radiotelescópio. Considerando explicitamente a convolução com o feixe instrumental e as contribuições de ruído, o sinal simulado pode ser escrito  análogo a equação~\eqref{modelo_medicao_bingo} como:
+
+\begin{equation}
+d_{\mathrm{sim}}(t,\nu)
+=
+G(t,\nu)
+\int_{4\pi}
+B(\theta,\phi,\nu)\,
+T_{\mathrm{sky}}^{\mathrm{sim}}(\theta,\phi,\nu)\,
+d\Omega
++
+n_{\mathrm{sim}}(t,\nu),
+\label{eq:tod_simulado}
+\end{equation}
+
+onde \(G(t,\nu)\) representa o ganho instrumental adotado na simulação, \(B(\theta,\phi,\nu)\) corresponde ao padrão de feixe da antena e \(T_{\mathrm{sky}}^{\mathrm{sim}}\) descreve o modelo sintético da temperatura de brilho do céu. O termo \(n_{\mathrm{sim}}(t,\nu)\) inclui contribuições artificiais de ruído térmico, ruído correlacionado do tipo \(1/f\), interferências simuladas e possíveis sistemáticos instrumentais.
+
+A principal vantagem dessa abordagem reside na possibilidade de controlar individualmente os parâmetros físicos e instrumentais envolvidos na aquisição. Isso permite investigar separadamente os efeitos produzidos por ruído térmico, instabilidades de ganho, estratégias de varredura, interferências por radiofrequência e condições atmosféricas sobre os produtos finais do processamento.
+
+Em aplicações voltadas à reconstrução de mapas do céu, o pipeline de simulação permite avaliar a degradação da sensibilidade, a introdução de artefatos sistemáticos e o desempenho de algoritmos de calibração, filtragem e \textit{map-making}. Além disso, comparações entre mapas simulados e mapas reconstruídos a partir do TOD sintético fornecem uma ferramenta importante para validação metodológica e caracterização do comportamento estatístico do sistema observacional.
+
+Neste trabalho, o pipeline de simulação tem como objetivo reproduzir, de maneira fisicamente consistente, as principais características observacionais esperadas para o experimento BINGO. Embora os modelos adotados procurem representar de forma realista os processos instrumentais e observacionais, é importante destacar que simplificações e aproximações são inevitáveis. Consequentemente, diferenças entre dados simulados e observações reais podem surgir devido a efeitos instrumentais não modelados, variabilidade atmosférica, interferências externas e limitações inerentes aos modelos utilizados.
+ 
+\subsection{Validação e Comparação}
+
+A comparação entre dados simulados e observações reais constitui uma etapa importante na validação de pipelines instrumentais e algoritmos de processamento. Embora simulações não reproduzam integralmente todas as complexidades do sistema físico, elas permitem verificar a consistência entre o comportamento esperado do instrumento e os dados efetivamente observados.
+
+Entre as principais aplicações das simulações destacam-se:
+
+\begin{itemize}
+
+\item validação de modelos instrumentais;
+
+\item teste de algoritmos de calibração e reconstrução de mapas;
+
+\item análise de efeitos sistemáticos;
+
+\item previsão de sensibilidade observacional;
+
+\item avaliação do impacto de ruídos e interferências sobre os produtos científicos.
+
+\end{itemize}
+
+A fidelidade das simulações depende diretamente da precisão dos modelos empregados para representar o céu, a resposta instrumental e os processos de aquisição. Simplificações excessivas podem resultar em discrepâncias entre comportamento simulado e observacional, limitando a capacidade preditiva do pipeline. Por esse motivo, adotamos pipelines que incorporam modelos progressivamente mais realistas.
 
 
 
