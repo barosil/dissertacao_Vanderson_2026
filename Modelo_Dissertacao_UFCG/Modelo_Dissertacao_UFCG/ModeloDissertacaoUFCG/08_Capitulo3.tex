@@ -587,26 +587,27 @@ Entre os mecanismos mais relevantes em radioastronomia destacam-se o ruído tér
 
 O ruído térmico corresponde às flutuações estatísticas associadas a movimentação aleatoria dos eletrons em componentes eletrônicos, como amplificadores e receptores \cite{mericia2019hi}. Esse tipo de ruído é caracterizado por uma distribuição gaussiana e estabelece o limite fundamental de sensibilidade do instrumento e depende diretamente da temperatura total do sistema previamente definida como \(T_{\mathrm{sys}}\) \cite{wilson2013tools,burke2019introduction}.
 
-A incerteza associada ao ruído térmico pode ser expressa pela equação do radiômetro \cite{mericia2019hi}:
+Em um receptor típico, elementos como amplificadores de baixo ruído, linhas de transmissão, detectores e demais componentes eletrônicos produzem flutuações elétricas aleatórias que se propagam ao longo da cadeia de recepção. Como consequência, a potência medida na saída do sistema corresponde à combinação entre o sinal proveniente do céu e uma contribuição adicional associada ao ruído interno do instrumento \cite{marr_snell_kurtz_2015}.
+
+ No contexto do BINGO, a sensibilidade instantânea dos receptores pode ser estimada por meio da expressão adotada nas simulações instrumentais do experimento \cite{abdalla2022bingoI}:
 
 \begin{equation}
-\sigma_T=
-\frac{T_{\mathrm{sys}}}
-{\sqrt{\Delta\nu\,t_{pix}}}
-\label{eq:radiometer_noise}
+\sigma_N=
+K,T_{\mathrm{sys}}
+\sqrt{
+\frac{1}{\tau \Delta \nu}
++
+\left(
+\frac{\Delta G}{G}
+\right)^2
+},
+\label{eq:bingo_noise}
 \end{equation}
 
-onde \(\sigma_T\) representa o desvio padrão da temperatura medida, \(\Delta\nu\) corresponde à largura de banda efetiva e \( t_{pix} \) ao tempo de integração por pixel, representado por \cite{mericia2019hi}:
+onde \(T_{\mathrm{sys}}\) representa a temperatura de sistema, \(\tau\) é o tempo de integração, \(\Delta\nu\) corresponde à largura de banda observada, \(G\) é o ganho médio do receptor e \(\Delta G\) descreve as flutuações estocásticas de ganho. Para o receptor correlacionado adotado pelo BINGO, o fator instrumental assume valor \(K=\sqrt{2}\) \cite{abdalla2022bingoI}.
 
-\begin{equation}
-t_{\mathrm{pix}} =
-\frac{n_c \, t_{\mathrm{obs}} \, \Omega_{\mathrm{pix}}}
-{\Omega_{\mathrm{surf}}}
-\end{equation}
+A Equação \ref{eq:bingo_noise} evidencia que a sensibilidade do instrumento é limitada não apenas pelo ruído térmico associado ao processo de detecção, mas também pelas instabilidades de ganho presentes na cadeia eletrônica. No limite ideal em que \(\Delta G/G \rightarrow 0\), recupera-se o comportamento previsto pela equação clássica do radiômetro.
 
-sendo \(n_c\) o número de canais ou feixes, \(t_{\mathrm{obs}}\) o tempo total de observação, \(\Omega_{\mathrm{pix}}\) a área sólida de cada pixel e \(\Omega_{\mathrm{surf}}\) a área total do céu observada.
-
-Essa relação evidencia que a sensibilidade do instrumento melhora com o aumento da largura de banda e do tempo de integração, embora haja compromissos práticos entre resolução espectral, resolução temporal e volume de dados. O ruído térmico é um componente fundamental a ser considerado durante a modelagem de dados observacionais, especialmente em experimentos de mapeamento de intensidade, onde a recuperação do sinal astrofísico depende diretamente da relação sinal-ruído presente nos dados adquiridos.
 
 \subsection{Ruído do tipo \(1/f\)}
 
@@ -621,15 +622,20 @@ P(f)\propto
 
 onde \(P(f)\) representa a potência espectral na frequência temporal \(f\) e \(\alpha\) descreve o grau de correlação temporal do processo.
 
-Em sistemas reais, a contribuição total do ruído costuma ser representada por um modelo combinado entre ruído branco e ruído correlacionado \cite{mericia2019hi}:
+Em sistemas reais, como nos receptores do BINGO, a contribuição total do ruído é representada por \cite{abdalla2022bingoI}:
 
 \begin{equation}
-    P(f) = \frac{\sigma_t^2}{\mu_{samp}} \left[1 + \left(\frac{f_k}{f}\right)^{\alpha}\right]
+    P(f) = \sigma_N^2 \left[1 + \left(\frac{f_k}{f}\right)^{\alpha}\right]
+    \label{eq}
 \end{equation}
 
-em que $\sigma_t$ corresponde ao desvio padrão do ruído térmico, $\mu_{samp}$ é a taxa de amostragem temporal, $f_k$ é a frequência de \textit{crossover} onde as potências de ruído branco e ruído \(1/f\) são iguais, e $\alpha$ descreve o índice espectral do ruído \(1/f\).
+onde \(P(f)\) é a densidade espectral de potência, \(\sigma_N \) é a sensibilidade radiométrica definida pela Equação \ref{eq}, \(f\) é a frequência temporal, \(f_k\) é a frequência de joelho (\textit{knee frequency}) e \(\alpha\) é o índice espectral do ruído correlacionado.
 
-A presença de ruído \(1/f\) pode introduzir assinaturas sistemáticas nos dados observacionais, especialmente em estratégias de varredura contínua, como o \textit{drift scan}, onde a correlação temporal do ruído pode resultar em estruturas espúrias nos mapas reconstruídos. Por esse motivo, a modelagem adequada do ruído \(1/f\) é essencial para a implementação de técnicas de mitigação e para a recuperação precisa do sinal astrofísico de interesse.
+A frequência de joelho corresponde ao ponto em que as contribuições do ruído branco e do ruído correlacionado possuem a mesma potência. Para frequências inferiores a \(\nu_k\), o ruído \(1/f\) passa a dominar o espectro temporal dos dados, introduzindo correlações de longo alcance no TOD e produzindo estruturas artificiais de grande escala nos mapas reconstruídos \cite{abdalla2022bingoI,guillen2023_bingo}.
+Em observações contínuas e de longa duração, como as realizadas pelo BINGO, o ruído térmico manifesta-se como flutuações estatísticas independentes entre amostras consecutivas, enquanto o ruído \(1/f\) produz correlações temporais persistentes ao longo do TOD. A presença simultânea dessas componentes reforça a necessidade de uma abordagem integrada para simulação e processamento dos dados, na qual os efeitos instrumentais sejam incorporados de forma consistente.
+
+Por esse motivo, modelos de ruído térmico e ruído correlacionado são incluídos nos pipelines de simulação do experimento, permitindo avaliar seus impactos sobre o TOD, sobre os algoritmos de reconstrução de mapas e sobre a recuperação do sinal cosmológico esperado.
+%----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 \subsection{Interferência por Radiofrequência (RFI)}
 
