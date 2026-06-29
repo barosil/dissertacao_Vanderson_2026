@@ -237,10 +237,10 @@ Essa formulação evidencia que o TOD resulta não apenas da estrutura astrofís
 A resposta angular de uma antena é caracterizada pelo seu padrão de radiação, que descreve como a sensibilidade do sistema varia em função da direção de observação \cite{gregorio2002fundamentos}. Em outras palavras, a antena não responde de forma isotrópica a sinais provenientes de todas as direções do espaço, apresentando maior sensibilidade em determinadas direções e menor em outras. O padrão de radiação pode ser expresso como:
 
 \begin{equation}
-P(\theta, , \phi) = P_0 , B(\theta, , \phi),
+P(\theta, \, \phi) = P_0 \, B(\theta, \, \phi),
 \end{equation}
 
-onde, \(P_0\) é a potência no máximo do feixe, \(B(\theta, , \phi)\) é o padrão normalizado e \(\theta, , \phi\) são coordenadas angulares.
+onde, \(P_0\) é a potência no máximo do feixe, \(B(\theta, \, \phi)\) é o padrão normalizado e \(\theta, , \phi\) são coordenadas angulares.
 
 O feixe da antena descreve a forma como a energia é irradiada ou recebida angularmente, determinando a resolução angular do instrumento. A largura do feixe corresponde ao ângulo que delimita a região de maior sensibilidade, sendo geralmente definida entre os pontos de meia potência, conhecidos como largura total à meia altura (\textit{Full Width at Half Maximum} – FWHM) \cite{burke2019introduction}, conforme ilustrado na Figura~\ref{fig}.
 
@@ -266,7 +266,7 @@ onde $\lambda$ é o comprimento de onda observado e $D$ é o diâmetro da abertu
 \item Os lóbulos laterais representam sensibilidade residual a direções fora do eixo principal e podem introduzir contaminações sistemáticas, como emissões da Terra, emissões de outras fontes astronômicas fora do campo de interesse, radiação difusa do fundo cósmico etc. \cite{cheng2009telescope_Desing}.
 \end{itemize}
 
-Radiotelescópios que recebem sinais muito fracos de suas radiofontes, até mesmo a radiação térmica do solo (com temperatura próxima a \(T \approx 300,K)\), que é captada pelos lóbulos secundários, acaba interferindo na relação sinal-ruído (S/R), assim como a radiação recebida de fora da borda do refletor principal (spillover) também prejudica a recepção do sinal emitido pela radiofonte \cite{sasao2009_radioantennas}, como representa a figura \ref{fig principal/secundario}.
+Radiotelescópios que recebem sinais muito fracos de suas radiofontes, até mesmo a radiação térmica do solo (com temperatura próxima a \(T \approx 300 \, K)\), que é captada pelos lóbulos secundários, acaba interferindo na relação sinal-ruído (S/R), assim como a radiação recebida de fora da borda do refletor principal (spillover) também prejudica a recepção do sinal emitido pela radiofonte \cite{sasao2009_radioantennas}, como representa a figura \ref{fig principal/secundario}.
 
 \begin{figure}[hbtp]
 \centering
@@ -281,9 +281,9 @@ Para um radiotelescópio \textit{single dish}, o feixe determina a resolução a
 \begin{equation}
 T_A(\theta_0,\phi_0)=
 \int_{4\pi}
-P_n(\theta - \theta_0,\phi - \phi_0)
-, T_B(\theta,\phi)
-, d\Omega,
+P_n(\theta - \theta_0 \,\phi - \phi_0)
+\, T_B(\theta,\phi)
+\, d\Omega,
 \label{eq}
 \end{equation}
 
@@ -354,7 +354,7 @@ E(\rho) = e^{-\frac{1}{2}\left(\frac{\rho}{\sigma_b}\right)^2},
 
 onde \(\sigma_b\) é a largura do taper gaussiano e \(\rho\) é o número de comprimentos de onda ao longo da abertura, expresso por:
 \begin{equation}
-\rho = \frac{D}{2 ,\Lambda},
+\rho = \frac{D}{2 \,\Lambda},
 \end{equation}
 
 sendo \(D\) o diâmetro da antena parabólica e \(\lambda\) o comprimento de onda.
@@ -363,11 +363,11 @@ Assumindo simetria azimutal do padrão de radiação, o feixe normalizado pode s
 
 \begin{equation}
 B_r(\theta) =
-\frac{\displaystyle \int_0^{\rho_{\max}} E(\rho),
+\frac{\displaystyle \int_0^{\rho_{\max}} E(\rho)\,
 j_0!\left(\rho \sin\theta\right),
 \rho, d\rho}
-{\displaystyle \int_0^{\rho_{\max}} E(\rho),
-\rho, d\rho}
+{\displaystyle \int_0^{\rho_{\max}} E(\rho)\,
+\rho \, d\rho}
 \label{eq:beam_pattern}
 \end{equation}
 
@@ -379,15 +379,15 @@ O ganho direto do feixe é então determinado pela razão entre a área total da
 G_r =
 \frac{4\pi}
 {\displaystyle \int_0^{\pi}
-B_r(\theta),
-\sin\theta, d\theta}
+B_r(\theta) \,
+\sin\theta \, d\theta}
 \label{eq:beam_gain}
 \end{equation}
 
 Aplicando esse procedimento aos modelos de feixe considerados por \cite{harper2018potential}, obtêm-se valores de ganho direto no intervalo:
 
 \begin{equation}
-40 \ \text{dBi} ; < ; G_r ; < ; 46 \ \text{dBi}.
+40 \, \text{dBi} <  G_r  <  46 \ \text{dBi}.
 \end{equation}
 
 
@@ -772,7 +772,7 @@ Essa expressão representa a integração da temperatura de brilho do céu ponde
 \subsection{Modelo de Medição do Radiotelescópio \label{sec:modelo_de_medicao}}
 
 
-Em um radiotelescópio, o sinal medido pelo detector está relacionado à potência eletromagnética recebida pela antena. Na teoria de radiometria, a potência detectada pode ser expressa como proporcional à temperatura equivalente do sistema. Ao incluir o ganho eletrônico do receptor, a potência medida ~\eqref{potebcia-de-ruido} pode ser escrita como
+Em um radiotelescópio, o sinal medido pelo detector está relacionado à potência eletromagnética recebida pela antena. Na teoria de radiometria, a potência detectada pode ser expressa como proporcional à temperatura equivalente do sistema. Ao incluir o ganho eletrônico do receptor, a potência medida ~\eqref{potencia-de-ruido} pode ser escrita como
 
 \begin{equation}
 P = k_B \, G \, T_{\mathrm{sys}} \, \Delta \nu,

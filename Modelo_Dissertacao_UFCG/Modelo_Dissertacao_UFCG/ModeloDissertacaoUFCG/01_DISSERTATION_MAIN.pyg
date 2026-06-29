@@ -1,0 +1,16 @@
+        language=Python,
+caption={Trecho simplificado do caso de uso de análise de mapas do céu.},
+label={lst}
+]
+
+cls = self._analyzer.compute_cls(
+skymap=sky_map,
+lmax=input_dto.lmax,
+)
+
+return AnalyzeSkyMapOutputDTO(
+nside=sky_map.nside_value,
+lmax=input_dto.lmax,
+cls=cls,
+)
+

@@ -4,18 +4,14 @@
 
 \chapter{Conclusões}
 
-% --------------------------------------------------------------------------------------------
-% 										Se houver seção
-% --------------------------------------------------------------------------------------------
+Esta dissertação apresentou o desenvolvimento de uma pipeline modular para simulação de observações radioastronômicas do tipo Single Dish, integrando a modelagem do céu, da resposta instrumental, da geração de Time Ordered Data (TOD) e da reconstrução de mapas em uma única infraestrutura computacional. Ao longo do trabalho foram reunidos os fundamentos físicos, matemáticos e computacionais necessários para descrever, de forma integrada, a relação entre o céu observado, a resposta instrumental, a geração de \textit{Time Ordered Data} (TOD) e a reconstrução de mapas.
 
-\section{Nome da seção}
+Uma das principais contribuições deste trabalho consiste na modelagem integrada da cadeia observacional no regime \textit{Single Dish}. A estrutura proposta estabelece uma correspondência entre os processos físicos envolvidos na observação e sua representação computacional, conectando, em uma mesma modelagem, a emissão astrofísica, a resposta do instrumento, a aquisição dos dados temporais e a etapa de reconstrução de mapas. Essa abordagem fornece uma visão sistêmica do processo observacional e estabelece uma base conceitual consistente para o desenvolvimento de simulações voltadas à investigação de efeitos instrumentais e metodologias de processamento de dados.
 
-% --------------------------------------------------------------------------------------------
-% 										Se houver subseção
-% --------------------------------------------------------------------------------------------
+Outra contribuição relevante é a arquitetura desenvolvida para a pipeline de simulação. A organização do software em módulos especializados, baseada em princípios de Programação Orientada a Objetos e \textit{Domain-Driven Design}, permitiu separar as diferentes responsabilidades do sistema e representar, de forma independente, os principais elementos físicos e computacionais envolvidos na simulação. Essa estrutura favorece a reutilização e manutenção do código, além da incorporação de novos modelos instrumentais ou observacionais sem alterações significativas na arquitetura existente.
 
+Os módulos implementados estabelecem uma infraestrutura computacional capaz de suportar as diferentes etapas do fluxo de simulação, desde a geração de mapas sintéticos do céu até a produção de TOD e sua posterior reconstrução em mapas. Dessa forma, a pipeline constitui uma base para estudos relacionados à caracterização de instrumentos, avaliação de estratégias observacionais, desenvolvimento de algoritmos de processamento e geração de conjuntos de dados sintéticos.
 
-\subsection{Nome da Subseção}
-
+Como continuidade desta pesquisa, a próxima etapa será dedicada à realização dos experimentos numéricos e à validação  dos modelos implementados. Nessa fase a  pipeline séra validada por meio de diferentes procedimentos, incluindo experimentos com céus sintéticos de propriedades conhecidas, comparação dos resultados com modelos teóricos, verificação da reprodução de características observacionais esperadas e comparação com ferramentas independentes. Isso permitirá avaliar sua capacidade de reproduzir características observacionais relevantes e investigar o impacto dos diferentes componentes físicos e instrumentais incorporados ao modelo.
 
 
